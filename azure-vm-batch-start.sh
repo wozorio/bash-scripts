@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ######################################################################
-# Script Name    : azure-start-all-vms.sh
+# Script Name    : azure-vm-batch-start.sh
 # Description    : Used to start all VMs in a subscription
 # Args           : n/a
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
