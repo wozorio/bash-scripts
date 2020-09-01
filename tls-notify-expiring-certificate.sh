@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ######################################################################
-# Script Name    : notify-expiring-tls-certificate.sh
+# Script Name    : tls-notify-expiring-certificate.sh
 # Description    : Used to send notification via e-mail about TLS
 #                  certificates that will expire in 60 days or less using Mailjet
 # Args           : WEBSITE SENDER RECIPIENT MJ_APIKEY_PUBLIC MJ_APIKEY_PRIVATE
