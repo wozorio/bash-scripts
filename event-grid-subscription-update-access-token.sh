@@ -5,7 +5,7 @@
 # Description    : Used to update the webhook Url of domain Event Grid
 #                  subscriptions with a new access token
 # Args           : SUBSCRIPTION_ID OAUTH2_TOKEN_ENDPOINT EVENT_GRID_DOMAIN CLIENT_ID CLIENT_SECRET
-# Author         : Wellington Ozorio <Wellington.Ozorio@br.bosch.com>
+# Author         : Wellington Ozorio <well.ozorio@gmail.com>
 ######################################################################
 
 # Stop execution on any error
