@@ -18,18 +18,14 @@ SUBSCRIPTION_ID="SUBSCRIPTION_ID"
 TIMESTAMP=$(date "+%Y-%m-%d-%H-%M-%S")
 RESOURCE_GROUP_NAME="${STAGE}-sys01-rg01"
 SQL_SERVER_NAME="${STAGE}-sys01-sqlsrv01"
-STORAGE_NAME_TERRAFORM_STATE="${STAGE}stage01terraform"
+export STORAGE_NAME_TERRAFORM_STATE="${STAGE}stage01terraform"
 
 # Retrieve the access key from the Teraform backend storage account
-ACCESS_KEY=$(
+export ACCESS_KEY=$(
   az storage account keys list \
   --account-name ${STORAGE_NAME_TERRAFORM_STATE} \
   --query "[0].value" | tr -d '"'
 )
-
-# Environment variables
-export STORAGE_NAME_TERRAFORM_STATE
-export ACCESS_KEY
 
 # Change to sys01 directory structure
 # Adjust the path according to your environment
