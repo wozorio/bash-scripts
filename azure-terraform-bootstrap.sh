@@ -57,14 +57,14 @@ create_storage_account() {
 }
 
 create_storage_container() {
-    ACCOUNT_KEY=$(az storage account keys list \
+    STORAGE_ACCOUNT_KEY=$(az storage account keys list \
         --account-name ${STORAGE_ACCOUNT_NAME} \
         --query "[0].value")
 
     STORAGE_CONTAINER_EXISTS=$(az storage container exists \
         --name ${STORAGE_CONTAINER_NAME} \
         --account-name ${STORAGE_ACCOUNT_NAME} \
-        --account-key ${ACCOUNT_KEY} \
+        --account-key ${STORAGE_ACCOUNT_KEY} \
         --query "exists")
 
     if [[ ${STORAGE_CONTAINER_EXISTS} == "true" ]]; then
