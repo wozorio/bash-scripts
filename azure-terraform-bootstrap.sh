@@ -71,7 +71,7 @@ create_storage_container() {
         echo "INFO: ${STORAGE_CONTAINER_NAME} storage container already exists!"
     else
         echo "INFO: Creating storage container: ${STORAGE_CONTAINER_NAME}"
-        az storage container create --name $container --account-name $saname --fail-on-exist
+        az storage container create --name ${STORAGE_CONTAINER_NAME} --account-name ${STORAGE_ACCOUNT_NAME} --account-key ${STORAGE_ACCOUNT_KEY}
     fi
 }
 
