@@ -26,7 +26,7 @@ LOCATION=$2
 STORAGE_ACCOUNT_NAME=$3
 STORAGE_CONTAINER_NAME="tfstate"
 
-create_resource_group() {
+function create_resource_group() {
     RESOURCE_GROUP_EXISTS=$(az group exists --name ${RESOURCE_GROUP_NAME})
 
     if [[ ${RESOURCE_GROUP_EXISTS} == "true" ]]; then
@@ -37,7 +37,7 @@ create_resource_group() {
     fi
 }
 
-create_storage_account() {
+function create_storage_account() {
     STORAGE_ACCOUNT_EXISTS=$(az storage account check-name --name ${STORAGE_ACCOUNT_NAME} --query "nameAvailable")
 
     if [[ ${STORAGE_ACCOUNT_EXISTS} == "false" ]]; then
@@ -56,7 +56,7 @@ create_storage_account() {
     fi
 }
 
-create_storage_container() {
+function create_storage_container() {
     STORAGE_ACCOUNT_KEY=$(az storage account keys list \
         --account-name ${STORAGE_ACCOUNT_NAME} \
         --query "[0].value")
