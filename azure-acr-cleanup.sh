@@ -11,7 +11,7 @@
 set -e
 
 # Check if correct parameters were passed
-if [ "$#" -lt 1 ]; then
+if [ "$#" -ne 1 ]; then
   echo "ERROR: Missing or invalid parameters!"
   echo "Usage example: ./container-registry-cleanup.sh CONTAINER_REGISTRY_NAME"
   exit 1
@@ -22,7 +22,7 @@ else
 
   # Fetch the list of repositories
   REPOSITORIES=()
-  REPOSITORIES="$(az acr repository list -n $CONTAINER_REGISTRY_NAME --output tsv)"
+  REPOSITORIES="$(az acr repository list -n "$CONTAINER_REGISTRY_NAME" --output tsv)"
 
   # Search for untagged (dangling) images in each repository
   echo "################################################"
@@ -32,7 +32,7 @@ else
   UNTAGGED_IMGS=()
   echo "${REPOSITORIES[@]}" | while read -r rep; do
     UNTAGGED_IMGS=$(
-      az acr repository show-manifests --name $CONTAINER_REGISTRY_NAME --repository $rep \
+      az acr repository show-manifests --name "$CONTAINER_REGISTRY_NAME" --repository "$rep" \
       --query "[?tags[0]==null].digest" \
       --orderby time_asc \
       --output tsv
@@ -67,7 +67,7 @@ else
     else
       # Get how many images exist in the repository
       MANIFEST_COUNT=$(
-        az acr repository show --name $CONTAINER_REGISTRY_NAME --repository $rep --output yaml |
+        az acr repository show --name "$CONTAINER_REGISTRY_NAME" --repository "$rep" --output yaml |
           awk '/manifestCount:/{print $NF}'
       )
 
@@ -80,7 +80,7 @@ else
         echo "${OLD_IMGS[@]}" | while read -r img; do
 
           # Get only the manifest digest without the timestamp
-          IMG_MANIFEST_ONLY="$(echo $img | cut -d' ' -f1)"
+          IMG_MANIFEST_ONLY="$(echo "$img" | cut -d' ' -f1)"
 
           # Get the repository last update time
           LAST_UPDATE_TIME_REPO=$(
@@ -91,20 +91,20 @@ else
           )
 
           # Convert the repository last update time into seconds
-          LAST_UPDATE_TIME_REPO="$(date -d $LAST_UPDATE_TIME_REPO +%s)"
+          LAST_UPDATE_TIME_REPO="$(date -d "$LAST_UPDATE_TIME_REPO" +%s)"
 
           # Get the image last update time
           LAST_UPDATE_TIME_IMG=$(
-            az acr repository show --name $CONTAINER_REGISTRY_NAME --image $rep@$IMG_MANIFEST_ONLY --output yaml |
+            az acr repository show --name "$CONTAINER_REGISTRY_NAME" --image "$rep@$IMG_MANIFEST_ONLY" --output yaml |
               awk '/lastUpdateTime:/{print $NF}' |
               # Remove single quote from the string
               sed "s/['\"]//g"
           )
 
           # Convert the image last update time into seconds
-          LAST_UPDATE_TIME_IMG="$(date -d $LAST_UPDATE_TIME_IMG +%s)"
+          LAST_UPDATE_TIME_IMG="$(date -d "$LAST_UPDATE_TIME_IMG" +%s)"
 
-          if [ $LAST_UPDATE_TIME_REPO -gt $LAST_UPDATE_TIME_IMG ]; then
+          if [ "$LAST_UPDATE_TIME_REPO" -gt "$LAST_UPDATE_TIME_IMG" ]; then
             IMG_TO_DELETE=$(
               az acr repository show --name $CONTAINER_REGISTRY_NAME --image $rep@$IMG_MANIFEST_ONLY --output yaml |
                 grep -A1 'tags:' | tail -n1 | awk '{ print $2}'

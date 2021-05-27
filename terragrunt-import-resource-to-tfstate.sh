@@ -33,7 +33,7 @@ cd ~/terraform.deployment/environments/${SUBSCRIPTION_NAME}/${STAGE}-stage01/sys
 
 # Iterate over each instance in the directory structure
 for INSTANCE in inst*; do
-  cd ${INSTANCE}/main
+  cd "${INSTANCE}"/main
 
   # Terraform Init
   terragrunt init
@@ -41,7 +41,7 @@ for INSTANCE in inst*; do
   # Import the new module into Terraform state file
   terragrunt import \
   module.sql_database_01.azurerm_mssql_database.database \
-  /subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP_NAME}/providers/Microsoft.Sql/servers/${SQL_SERVER_NAME}/databases/${STAGE}-sys01-${INSTANCE}-sqldb01
+  /subscriptions/"${SUBSCRIPTION_ID}"/resourceGroups/"${RESOURCE_GROUP_NAME}"/providers/Microsoft.Sql/servers/"${SQL_SERVER_NAME}"/databases/"${STAGE}"-sys01-"${INSTANCE}"-sqldb01
 
   # Remove the old module from Terraform state file
   terragrunt state rm module.sql_database_01.azurerm_sql_database.database
@@ -50,7 +50,7 @@ for INSTANCE in inst*; do
   terragrunt state pull >main.tfstate
 
   # Make a backup copy of the downloaded Terraform state file
-  cp main.tfstate ~/backup/bkp-${STAGE}-${TIMESTAMP}-${INSTANCE}-main.tfstate
+  cp main.tfstate ~/backup/bkp-"${STAGE}"-"${TIMESTAMP}"-"${INSTANCE}"-main.tfstate
 
   # Change the value of create_mode from null to "Default"
   sed -i 's/"create_mode": null/"create_mode": "Default"/' main.tfstate

@@ -18,7 +18,7 @@ function usage() {
 }
 
 # Check if the right number of arguments were passed
-if [[ $# -lt 5 ]] || [[ $# -gt 5 ]]; then
+if [[ "$#" -ne 5 ]]; then
   usage
 fi
 
@@ -36,19 +36,19 @@ CERT_FILE=$(mktemp)
 trap "unlink ${CERT_FILE}" EXIT
 
 # Check whether the address of the website can be resolved
-host ${WEBSITE} >&-
+host "${WEBSITE}" >&-
 if [ ${?} -eq "0" ]; then
-  echo -n | timeout 5 openssl s_client -servername ${WEBSITE} -connect ${WEBSITE}:443 2>/dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' >${CERT_FILE}
+  echo -n | timeout 5 openssl s_client -servername "${WEBSITE}" -connect "${WEBSITE}":443 2>/dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' >"${CERT_FILE}"
 else
   echo "ERROR: Website could not be resolved. Please ensure the correct address is passed."
   exit 1
 fi
 
-CERTIFICATE_SIZE=$(stat -c "%s" ${CERT_FILE})
+CERTIFICATE_SIZE=$(stat -c "%s" "${CERT_FILE}")
 
 if [ "${CERTIFICATE_SIZE}" -gt "1" ]; then
   # Get the certificate expiration date
-  CERT_EXPIRY_DATE=$(openssl x509 -in ${CERT_FILE} -enddate -noout | sed "s/.*=\(.*\)/\1/")
+  CERT_EXPIRY_DATE=$(openssl x509 -in "${CERT_FILE}" -enddate -noout | sed "s/.*=\(.*\)/\1/")
   CERT_EXPIRY_DATE_SHORT=$(date -d "${CERT_EXPIRY_DATE}" +%d-%b-%Y)
 
   # Convert the certificate expiration date into seconds
@@ -58,7 +58,7 @@ if [ "${CERTIFICATE_SIZE}" -gt "1" ]; then
   CURRENT_DATE_SECS=$(date -d now +%s)
 
   # Calculate how many days are left for the certificate to expire
-  DATE_DIFF=$(((${CERT_EXPIRY_DATE_SECS} - ${CURRENT_DATE_SECS}) / 86400))
+  DATE_DIFF=$(((CERT_EXPIRY_DATE_SECS - CURRENT_DATE_SECS) / 86400))
 
   # Check if the certificate will expire in 20 days or earlier
   if [[ 60 -gt ${DATE_DIFF} ]]; then
@@ -82,7 +82,7 @@ if [ "${CERTIFICATE_SIZE}" -gt "1" ]; then
     curl \
     -s \
     -X POST \
-    --user ${MJ_APIKEY_PUBLIC}:${MJ_APIKEY_PRIVATE} \
+    --user "${MJ_APIKEY_PUBLIC}":"${MJ_APIKEY_PRIVATE}" \
     https://api.mailjet.com/v3/send \
     -H 'Content-Type: application/json' \
     -d "${REQUEST_DATA}"

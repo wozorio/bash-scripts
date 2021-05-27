@@ -18,7 +18,7 @@ function usage() {
 }
 
 # Check if the right number of arguments was passed
-if [[ $# -ne 5 ]]; then
+if [[ "$#" -ne 5 ]]; then
   usage
 fi
 
@@ -32,48 +32,56 @@ CLIENT_SECRET=$5
 RESOURCE_GROUP="RG_${EVENT_GRID_DOMAIN}"
 
 # List Event Grid domain topics
-EVENT_GRID_TOPICS=$(az eventgrid domain topic list \
-  -g ${RESOURCE_GROUP} \
-  --domain-name ${EVENT_GRID_DOMAIN} \
+EVENT_GRID_TOPICS=$(
+  az eventgrid domain topic list \
+  -g "${RESOURCE_GROUP}" \
+  --domain-name "${EVENT_GRID_DOMAIN}" \
   --query [].name \
-  --output tsv)
+  --output tsv
+)
 
 if [[ -n ${EVENT_GRID_TOPICS} ]]; then
   # Iterate over each topic
   echo "${EVENT_GRID_TOPICS[@]}" | while read -r topic; do
-    EVENT_GRID_SUBSCRIPTIONS=$(az eventgrid event-subscription list \
+    EVENT_GRID_SUBSCRIPTIONS=$(
+      az eventgrid event-subscription list \
       --source-resource-id "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.EventGrid/domains/${EVENT_GRID_DOMAIN}/topics/${topic}" \
       --query [].name \
-      --output tsv)
+      --output tsv
+    )
 
     if [[ -n ${EVENT_GRID_SUBSCRIPTIONS} ]]; then
       # Iterate over each subscription
       echo "${EVENT_GRID_SUBSCRIPTIONS[@]}" | while read -r subscription; do
         # Encode the client credentials with base64
-        ENCODED_CLIENT_CREDENTIALS=$(echo -n "${CLIENT_ID}:${CLIENT_SECRET}" | base64 -w 0)
+        ENCODED_CLIENT_CREDENTIALS=$(echo -n "${CLIENT_ID}":"${CLIENT_SECRET}" | base64 -w 0)
 
         echo "Getting an access token for the subscription ${subscription}"
-        ACCESS_TOKEN=$(curl --request POST \
-          --url ${OAUTH2_TOKEN_ENDPOINT} \
+        ACCESS_TOKEN=$(
+          curl --request POST \
+          --url "${OAUTH2_TOKEN_ENDPOINT}" \
           --header "Accept:application/json" \
           --header "Authorization:Basic ${ENCODED_CLIENT_CREDENTIALS}" \
           --data grant_type=client_credentials \
-          --data client_id=${CLIENT_ID} \
-          --data client_secret=${CLIENT_SECRET} \
-          --data scope=${subscription} |
-          jq '.access_token' |
-          tr -d '"')
+          --data client_id="${CLIENT_ID}" \
+          --data client_secret="${CLIENT_SECRET}" \
+          --data scope="${subscription}" |
+            jq '.access_token' |
+            tr -d '"'
+        )
 
         # Fetch the endpoint Url of the subscription
-        SUBSCRIPTION_ENDPOINT_URL=$(az eventgrid event-subscription show --name ${subscription} \
+        SUBSCRIPTION_ENDPOINT_URL=$(
+          az eventgrid event-subscription show --name ${subscription} \
           --source-resource-id "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.EventGrid/domains/${EVENT_GRID_DOMAIN}/topics/${topic}" \
           --include-full-endpoint-url true \
           --query "destination.endpointUrl" |
-          tr -d '"')
+            tr -d '"'
+        )
 
         # Remove the token from the endpoint Url
-        SUBSCRIPTION_ENDPOINT_URL=$(echo ${SUBSCRIPTION_ENDPOINT_URL} | sed 's/&token=.*//')
-        SUBSCRIPTION_ENDPOINT_URL=$(echo ${SUBSCRIPTION_ENDPOINT_URL} | sed 's/?token=.*//')
+        SUBSCRIPTION_ENDPOINT_URL=$(echo "${SUBSCRIPTION_ENDPOINT_URL}" | sed 's/&token=.*//')
+        SUBSCRIPTION_ENDPOINT_URL=$(echo "${SUBSCRIPTION_ENDPOINT_URL}" | sed 's/?token=.*//')
 
         if [[ ${SUBSCRIPTION_ENDPOINT_URL} == *"code="* ]]; then
           SUBSCRIPTION_ENDPOINT_URL="$(echo "${SUBSCRIPTION_ENDPOINT_URL}&")"
@@ -83,8 +91,8 @@ if [[ -n ${EVENT_GRID_TOPICS} ]]; then
 
         # Update the endpoint of the subscription with the new access token
         az eventgrid event-subscription update --name ${subscription} \
-          --source-resource-id "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.EventGrid/domains/${EVENT_GRID_DOMAIN}/topics/${topic}" \
-          --endpoint "${SUBSCRIPTION_ENDPOINT_URL}token=${ACCESS_TOKEN}"
+        --source-resource-id "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.EventGrid/domains/${EVENT_GRID_DOMAIN}/topics/${topic}" \
+        --endpoint "${SUBSCRIPTION_ENDPOINT_URL}token=${ACCESS_TOKEN}"
       done
     else
       echo "No Event Grid subscriptions found!"
