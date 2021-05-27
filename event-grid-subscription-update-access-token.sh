@@ -72,7 +72,7 @@ if [[ -n ${EVENT_GRID_TOPICS} ]]; then
 
         # Fetch the endpoint Url of the subscription
         SUBSCRIPTION_ENDPOINT_URL=$(
-          az eventgrid event-subscription show --name ${subscription} \
+          az eventgrid event-subscription show --name "${subscription}" \
           --source-resource-id "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.EventGrid/domains/${EVENT_GRID_DOMAIN}/topics/${topic}" \
           --include-full-endpoint-url true \
           --query "destination.endpointUrl" |
@@ -90,7 +90,7 @@ if [[ -n ${EVENT_GRID_TOPICS} ]]; then
         fi
 
         # Update the endpoint of the subscription with the new access token
-        az eventgrid event-subscription update --name ${subscription} \
+        az eventgrid event-subscription update --name "${subscription}" \
         --source-resource-id "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.EventGrid/domains/${EVENT_GRID_DOMAIN}/topics/${topic}" \
         --endpoint "${SUBSCRIPTION_ENDPOINT_URL}token=${ACCESS_TOKEN}"
       done

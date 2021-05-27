@@ -57,7 +57,7 @@ else
   OLD_IMGS=()
   echo "${REPOSITORIES[@]}" | while read -r rep; do
     OLD_IMGS=$(
-      az acr repository show-manifests --name $CONTAINER_REGISTRY_NAME --repository $rep \
+      az acr repository show-manifests --name "$CONTAINER_REGISTRY_NAME" --repository "$rep" \
       --query "[?timestamp < '$DATE_THRESHOLD'].[digest, timestamp]" \
       --orderby time_asc \
       --output tsv
@@ -84,7 +84,7 @@ else
 
           # Get the repository last update time
           LAST_UPDATE_TIME_REPO=$(
-            az acr repository show --name $CONTAINER_REGISTRY_NAME --repository $rep --output yaml |
+            az acr repository show --name "$CONTAINER_REGISTRY_NAME" --repository "$rep" --output yaml |
               awk '/lastUpdateTime:/{print $NF}' |
               # Remove single quote from the string
               sed "s/['\"]//g"
@@ -106,7 +106,7 @@ else
 
           if [ "$LAST_UPDATE_TIME_REPO" -gt "$LAST_UPDATE_TIME_IMG" ]; then
             IMG_TO_DELETE=$(
-              az acr repository show --name $CONTAINER_REGISTRY_NAME --image $rep@$IMG_MANIFEST_ONLY --output yaml |
+              az acr repository show --name "$CONTAINER_REGISTRY_NAME" --image "$rep"@"$IMG_MANIFEST_ONLY" --output yaml |
                 grep -A1 'tags:' | tail -n1 | awk '{ print $2}'
             )
 
