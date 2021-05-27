@@ -48,12 +48,12 @@ function create_storage_account() {
         --name "${STORAGE_ACCOUNT_NAME}" \
         --resource-group "${RESOURCE_GROUP_NAME}" \
         --access-tier "Cool" \
-        --kind BlobStorage \
+        --kind "BlobStorage" \
         --location "${LOCATION}" \
-        --sku Standard_LRS \
+        --sku "Standard_LRS" \
         --https-only $true \
         --allow-blob-public-access $false \
-        --min-tls-version TLS1_2
+        --min-tls-version "TLS1_2"
     fi
 }
 
