@@ -1,0 +1,23 @@
+{
+    "rules": [
+        {
+            "enabled": true,
+            "name": "delete-old-versions",
+            "type": "Lifecycle",
+            "definition": {
+                "actions": {
+                    "version": {
+                        "delete": {
+                            "daysAfterCreationGreaterThan": 30
+                        }
+                    }
+                },
+                "filters": {
+                    "blobTypes": [
+                        "blockBlob"
+                    ]
+                }
+            }
+        }
+    ]
+}

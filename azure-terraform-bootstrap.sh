@@ -51,9 +51,27 @@ function create_storage_account() {
         --kind "BlobStorage" \
         --location "${LOCATION}" \
         --sku "Standard_LRS" \
-        --https-only $true \
-        --allow-blob-public-access $false \
+        --https-only true \
+        --allow-blob-public-access false \
         --min-tls-version "TLS1_2"
+
+        # Enable versioning
+        # https://docs.microsoft.com/en-us/azure/storage/blobs/versioning-overview
+        az storage account blob-service-properties update \
+        --account-name "${STORAGE_ACCOUNT_NAME}" \
+        --resource-group "${RESOURCE_GROUP_NAME}" \
+        --enable-versioning true \
+        --enable-delete-retention true \
+        --delete-retention-days 30 \
+        --container-retention true \
+        --container-days 30
+
+        # Delete old versions
+        # https://docs.microsoft.com/en-us/azure/storage/blobs/storage-lifecycle-management-concepts?tabs=azure-portal
+        az storage account management-policy create \
+        --account-name "${STORAGE_ACCOUNT_NAME}" \
+        --resource-group "${RESOURCE_GROUP_NAME}" \
+        --policy "@files/azure-blob-policy-delete-old-versions.json"
     fi
 }
 
