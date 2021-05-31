@@ -1,4 +1,4 @@
-# Bash Scripts
+# Bash scripts
 
 ![GitHub](https://img.shields.io/github/license/wozorio/bash-scripts)
 
