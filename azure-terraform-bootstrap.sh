@@ -55,7 +55,7 @@ function create_storage_account() {
         --allow-blob-public-access false \
         --min-tls-version "TLS1_2"
 
-        # Enable versioning
+        # Enable blob versioning
         # https://docs.microsoft.com/en-us/azure/storage/blobs/versioning-overview
         az storage account blob-service-properties update \
         --account-name "${STORAGE_ACCOUNT_NAME}" \
@@ -66,8 +66,8 @@ function create_storage_account() {
         --container-retention true \
         --container-days 30
 
-        # Delete old versions
-        # https://docs.microsoft.com/en-us/azure/storage/blobs/storage-lifecycle-management-concepts?tabs=azure-portal
+        # Create a policy to delete blob versions older than 30 days
+        # https://docs.microsoft.com/en-us/azure/storage/blobs/storage-lifecycle-management-concepts?tabs=azure-portal#manage-versions
         az storage account management-policy create \
         --account-name "${STORAGE_ACCOUNT_NAME}" \
         --resource-group "${RESOURCE_GROUP_NAME}" \
