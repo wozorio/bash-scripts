@@ -2,7 +2,7 @@
 
 ######################################################################
 # Script Name    : azure-acr-delete-images-by-manifest.sh
-# Description    : Used to delete images by the manifest digest
+# Description    : Used to delete container images by the manifest digest
 # Args           : ACR_NAME REPO
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
 ######################################################################
