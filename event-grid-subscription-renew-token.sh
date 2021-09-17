@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ######################################################################
-# Script Name    : event-grid-subscription-renew-access-token.sh
+# Script Name    : event-grid-subscription-renew-token.sh
 # Description    : Used to update the webhook Url of domain Event Grid
 #                  subscriptions with a new access token
 # Args           : SUBSCRIPTION_ID OAUTH2_TOKEN_ENDPOINT EVENT_GRID_DOMAIN CLIENT_ID CLIENT_SECRET RESOURCE_GROUP
@@ -13,7 +13,7 @@ set +e
 
 function usage() {
   echo "ERROR: Missing or invalid arguments!"
-  echo "Usage example: ./event-grid-subscription-renew-access-token.sh SUBSCRIPTION_ID OAUTH2_TOKEN_ENDPOINT EVENT_GRID_DOMAIN CLIENT_ID CLIENT_SECRET RESOURCE_GROUP"
+  echo "Usage example: ./event-grid-subscription-renew-token.sh SUBSCRIPTION_ID OAUTH2_TOKEN_ENDPOINT EVENT_GRID_DOMAIN CLIENT_ID CLIENT_SECRET RESOURCE_GROUP"
   exit 1
 }
 
