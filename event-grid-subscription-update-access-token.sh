@@ -1,24 +1,24 @@
 #!/bin/bash
 
 ######################################################################
-# Script Name    : event-grid-subscription-update-access-token.sh
+# Script Name    : event-grid-subscription-renew-access-token.sh
 # Description    : Used to update the webhook Url of domain Event Grid
 #                  subscriptions with a new access token
-# Args           : SUBSCRIPTION_ID OAUTH2_TOKEN_ENDPOINT EVENT_GRID_DOMAIN CLIENT_ID CLIENT_SECRET
+# Args           : SUBSCRIPTION_ID OAUTH2_TOKEN_ENDPOINT EVENT_GRID_DOMAIN CLIENT_ID CLIENT_SECRET RESOURCE_GROUP
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
 ######################################################################
 
-# Stop execution on any error
-set -e
+# Continue execution on errors
+set +e
 
 function usage() {
   echo "ERROR: Missing or invalid arguments!"
-  echo "Usage example: ./event-grid-subscription-update-access-token.sh SUBSCRIPTION_ID OAUTH2_TOKEN_ENDPOINT EVENT_GRID_DOMAIN CLIENT_ID CLIENT_SECRET"
+  echo "Usage example: ./event-grid-subscription-renew-access-token.sh SUBSCRIPTION_ID OAUTH2_TOKEN_ENDPOINT EVENT_GRID_DOMAIN CLIENT_ID CLIENT_SECRET RESOURCE_GROUP"
   exit 1
 }
 
 # Check if the right number of arguments was passed
-if [[ "$#" -ne 5 ]]; then
+if [[ "$#" -ne 6 ]]; then
   usage
 fi
 
@@ -28,8 +28,7 @@ OAUTH2_TOKEN_ENDPOINT=$2
 EVENT_GRID_DOMAIN=$3
 CLIENT_ID=$4
 CLIENT_SECRET=$5
-
-RESOURCE_GROUP="RG_${EVENT_GRID_DOMAIN}"
+RESOURCE_GROUP=$6
 
 # List Event Grid domain topics
 EVENT_GRID_TOPICS=$(
@@ -40,7 +39,7 @@ EVENT_GRID_TOPICS=$(
   --output tsv
 )
 
-if [[ -n ${EVENT_GRID_TOPICS} ]]; then
+if [[ -n "${EVENT_GRID_TOPICS}" ]]; then
   # Iterate over each topic
   echo "${EVENT_GRID_TOPICS[@]}" | while read -r topic; do
     EVENT_GRID_SUBSCRIPTIONS=$(
@@ -50,7 +49,7 @@ if [[ -n ${EVENT_GRID_TOPICS} ]]; then
       --output tsv
     )
 
-    if [[ -n ${EVENT_GRID_SUBSCRIPTIONS} ]]; then
+    if [[ -n "${EVENT_GRID_SUBSCRIPTIONS}" ]]; then
       # Iterate over each subscription
       echo "${EVENT_GRID_SUBSCRIPTIONS[@]}" | while read -r subscription; do
         # Encode the client credentials with base64
@@ -83,7 +82,7 @@ if [[ -n ${EVENT_GRID_TOPICS} ]]; then
         SUBSCRIPTION_ENDPOINT_URL=$(echo "${SUBSCRIPTION_ENDPOINT_URL}" | sed 's/&token=.*//')
         SUBSCRIPTION_ENDPOINT_URL=$(echo "${SUBSCRIPTION_ENDPOINT_URL}" | sed 's/?token=.*//')
 
-        if [[ ${SUBSCRIPTION_ENDPOINT_URL} == *"code="* ]]; then
+        if [[ "${SUBSCRIPTION_ENDPOINT_URL}" == *"code="* ]]; then
           SUBSCRIPTION_ENDPOINT_URL="$(echo "${SUBSCRIPTION_ENDPOINT_URL}&")"
         else
           SUBSCRIPTION_ENDPOINT_URL="$(echo "${SUBSCRIPTION_ENDPOINT_URL}?")"
