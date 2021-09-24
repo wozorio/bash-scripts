@@ -43,7 +43,7 @@ function check_image_exists() {
     echo "${IMAGE_EXISTS}"
 }
 
-function mirror_container_image() {
+function mirror_image_to_acr() {
     logon_to_acr
     local IMAGE_EXISTS=$(check_image_exists)
 
@@ -63,4 +63,4 @@ function mirror_container_image() {
     fi
 }
 
-mirror_container_image
+mirror_image_to_acr
