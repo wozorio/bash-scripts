@@ -1,96 +1,125 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ######################################################################
 # Script Name    : tls-notify-expiring-certificate.sh
 # Description    : Used to send notification via e-mail about TLS
-#                  certificates that will expire in 60 days or less using Mailjet
-# Args           : WEBSITE SENDER RECIPIENT MJ_APIKEY_PUBLIC MJ_APIKEY_PRIVATE
+#                  certificates that will expire in XX days or less using Mailjet
+# Args           : URL SENDER RECIPIENT API_PUBLIC_KEY API_PRIVATE_KEY
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
 ######################################################################
 
-# Stop execution on any error
-set -e
+set -o errexit
+set -o pipefail
+set -o nounset
 
 function usage() {
   echo "ERROR: Missing or invalid arguments!"
-  echo "Usage example: ./notify-expiring-tls-certificate.sh WEBSITE SENDER RECIPIENT MJ_APIKEY_PUBLIC MJ_APIKEY_PRIVATE"
+  echo "Usage example: ./tls-notify-expiring-certificate.sh URL SENDER RECIPIENT API_PUBLIC_KEY API_PRIVATE_KEY THRESHOLD (OPTIONAL)"
   exit 1
 }
 
 # Check if the right number of arguments were passed
-if [[ "$#" -ne 5 ]]; then
+if [[ "${#}" -lt 5 ]]; then
   usage
 fi
 
 # Declare variables
-WEBSITE=$1
+URL=$1
 SENDER=$2
 RECIPIENT=$3
-MJ_APIKEY_PUBLIC=$4
-MJ_APIKEY_PRIVATE=$5
+API_PUBLIC_KEY=$4
+API_PRIVATE_KEY=$5
 
-# Temporary file used to store the certificate
-CERT_FILE=$(mktemp)
+# Define default value of 60 (days) for the THRESHOLD variable if an argument in the 6th position is not passed
+THRESHOLD=${6:-60}
 
-# Delete temporary file on exit
-trap "unlink ${CERT_FILE}" EXIT
+function check_url() {
+  host "${URL}" >&-
 
-# Check whether the address of the website can be resolved
-host "${WEBSITE}" >&-
-if [ ${?} -eq "0" ]; then
-  echo -n | timeout 5 openssl s_client -servername "${WEBSITE}" -connect "${WEBSITE}":443 2>/dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' >"${CERT_FILE}"
-else
-  echo "ERROR: Website could not be resolved. Please ensure the correct address is passed."
-  exit 1
-fi
+  if [[ "${?}" -ne 0 ]]; then
+    echo "ERROR: URL could not be resolved. Please ensure the correct address is passed."
+    exit 1
+  fi
+}
 
-CERTIFICATE_SIZE=$(stat -c "%s" "${CERT_FILE}")
+function fetch_certificate() {
+  # Check whether the URL can be resolved
+  check_url
 
-if [ "${CERTIFICATE_SIZE}" -gt "1" ]; then
-  # Get the certificate expiration date
-  CERT_EXPIRY_DATE=$(openssl x509 -in "${CERT_FILE}" -enddate -noout | sed "s/.*=\(.*\)/\1/")
-  CERT_EXPIRY_DATE_SHORT=$(date -d "${CERT_EXPIRY_DATE}" +%d-%b-%Y)
+  # Define temp file used to store the certificate
+  local CERT_FILE=$(mktemp)
 
-  # Convert the certificate expiration date into seconds
-  CERT_EXPIRY_DATE_SECS=$(date -d "${CERT_EXPIRY_DATE}" +%s)
+  echo -n | timeout 5 openssl s_client -servername "${URL}" -connect "${URL}":443 2>/dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' >"${CERT_FILE}"
 
-  # Convert the current date into seconds
-  CURRENT_DATE_SECS=$(date -d now +%s)
+  local CERTIFICATE_SIZE=$(stat -c "%s" "${CERT_FILE}")
 
-  # Calculate how many days are left for the certificate to expire
-  DATE_DIFF=$(((CERT_EXPIRY_DATE_SECS - CURRENT_DATE_SECS) / 86400))
+  if [[ "${CERTIFICATE_SIZE}" -lt 1 ]]; then
+    echo "ERROR: Could not read the expiration date of the certificate. Please check the TLS settings of the web server."
+    exit 1
+  fi
 
-  # Check if the certificate will expire in 20 days or earlier
-  if [[ 60 -gt ${DATE_DIFF} ]]; then
-    echo "WARNING: Oops! Certificate will expire in ${DATE_DIFF} days."
-    SUBJECT="TLS certificate for ${WEBSITE} about to expire"
-    MESSAGE="<p> Dear SysAdmin, </p> \
-    <p> This is to notify you that the TLS certificate for the address <b>${WEBSITE}</b> will expire on <b>${CERT_EXPIRY_DATE_SHORT}</b>. </p> \
+  echo "${CERT_FILE}"
+}
+
+function send_mail() {
+  local EMAIL_API="https://api.mailjet.com/v3/send"
+
+  local SUBJECT="TLS certificate for ${URL} about to expire"
+
+  local MESSAGE="<p> Dear Site Reliability Engineer, </p> \
+    <p> This is to notify you that the TLS certificate for the address <b>${URL}</b> will expire on <b>${CERT_EXPIRY_DATE_SHORT}</b>. </p> \
     <p> Please ensure a new certificate is ordered and installed in a timely fashion. There are ${DATE_DIFF} days remaining. </p> \
     <p> Sincerely yours, </p> \
     <p> DevOps Team </p>"
 
-    REQUEST_DATA='{
-      "FromEmail":"'${SENDER}'",
-      "FromName":"Operations",
-      "Subject": "'${SUBJECT}'",
-      "Html-part":"'${MESSAGE}'",
-      "To":"'${RECIPIENT}'",
+  local REQUEST_DATA='{
+    "FromEmail":"'${SENDER}'",
+    "FromName":"Operations",
+    "Subject": "'${SUBJECT}'",
+    "Html-part":"'${MESSAGE}'",
+    "To":"'${RECIPIENT}'",
     }'
 
-    echo "Sending out notification via e-mail"
-    curl \
-    -s \
-    -X POST \
-    --user "${MJ_APIKEY_PUBLIC}":"${MJ_APIKEY_PRIVATE}" \
-    https://api.mailjet.com/v3/send \
-    -H 'Content-Type: application/json' \
-    -d "${REQUEST_DATA}"
+  echo "Sending out notification via e-mail"
+  curl \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --user "${API_PUBLIC_KEY}":"${API_PRIVATE_KEY}" "${EMAIL_API}" \
+  --data "${REQUEST_DATA}" \
+  --fail
+
+  if [[ "${?}" -ne 0 ]]; then
+    echo "ERROR: Failed sending e-mail!"
+    exit 1
+  fi
+}
+
+function notify_expiring_certificate() {
+  local CERT_FILE=$(fetch_certificate)
+
+  # Delete temp file on exit
+  trap "unlink ${CERT_FILE}" EXIT
+
+  # Get certificate expiration date
+  local CERT_EXPIRY_DATE=$(openssl x509 -in "${CERT_FILE}" -enddate -noout | sed "s/.*=\(.*\)/\1/")
+  local CERT_EXPIRY_DATE_SHORT=$(date -d "${CERT_EXPIRY_DATE}" +%d-%b-%Y)
+
+  # Convert certificate expiration date into seconds
+  local CERT_EXPIRY_DATE_SECS=$(date -d "${CERT_EXPIRY_DATE}" +%s)
+
+  # Convert current date into seconds
+  local CURRENT_DATE_SECS=$(date -d now +%s)
+
+  # Calculate how many days are left for the certificate to expire
+  local DATE_DIFF=$(((CERT_EXPIRY_DATE_SECS - CURRENT_DATE_SECS) / 86400))
+
+  # Check if certificate will expire before the threshold
+  if [[ "${DATE_DIFF}" -le "${THRESHOLD}" ]]; then
+    echo "WARNING: Oops! Certificate will expire in ${DATE_DIFF} days."
+    send_mail
   else
     echo "INFO: Nothing to worry about. TLS certificate will expire only in ${DATE_DIFF} days from now. To be more precise on ${CERT_EXPIRY_DATE_SHORT}"
   fi
+}
 
-else
-  echo "ERROR: Could not read the expiration date of the certificate. Please check the TLS settings of the website."
-  exit 1
-fi
+notify_expiring_certificate
