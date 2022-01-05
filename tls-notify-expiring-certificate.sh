@@ -66,10 +66,9 @@ function send_email() {
     local SUBJECT="TLS certificate for ${URL} about to expire"
 
     local MESSAGE="<p> Dear Site Reliability Engineer, </p> \
-        <p> This is to notify you that the TLS certificate for <b>${URL}</b> will expire on <b>${CERT_EXPIRY_DATE_SHORT}</b>. </p> \
+        <p> This is to notify you that the TLS certificate for <b> ${URL} </b> will expire on <b> ${CERT_EXPIRY_DATE_SHORT} </b>. </p> \
         <p> Please ensure a new certificate is ordered and installed in a timely fashion. There are ${DATE_DIFF} days remaining. </p> \
-        <p> Sincerely yours, </p> \
-        <br> DevOps Team </br>"
+        <p> Sincerely yours, <br>DevOps Team </p>"
 
     local REQUEST_DATA='{
         "FromEmail":"'${SENDER}'",
