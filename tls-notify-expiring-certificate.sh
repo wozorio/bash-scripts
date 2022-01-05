@@ -4,7 +4,7 @@
 # Script Name    : tls-notify-expiring-certificate.sh
 # Description    : Used to send notification via e-mail about TLS
 #                  certificates that will expire in XX days or less using Mailjet
-# Args           : URL SENDER RECIPIENT API_PUBLIC_KEY API_PRIVATE_KEY
+# Args           : URL SENDER RECIPIENT API_PUBLIC_KEY API_PRIVATE_KEY THRESHOLD (OPTIONAL)
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
 ######################################################################
 
