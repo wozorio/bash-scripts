@@ -66,7 +66,7 @@ function send_email() {
     local SUBJECT="TLS certificate for ${URL} about to expire"
 
     local MESSAGE="<p> Dear Site Reliability Engineer, </p> \
-        <p> This is to notify you that the TLS certificate for <b> ${URL} </b> will expire on <b> ${CERT_EXPIRY_DATE_SHORT} </b>. </p> \
+        <p> This is to notify you that the TLS certificate for <b>${URL}</b> will expire on <b>${CERT_EXPIRY_DATE_SHORT}</b>. </p> \
         <p> Please ensure a new certificate is ordered and installed in a timely fashion. There are ${DATE_DIFF} days remaining. </p> \
         <p> Sincerely yours, <br>DevOps Team </p>"
 
@@ -81,8 +81,9 @@ function send_email() {
     echo "Sending out notification via e-mail"
     curl \
     --request POST \
+    --url "${EMAIL_API}" \
     --header 'Content-Type: application/json' \
-    --user "${API_PUBLIC_KEY}":"${API_PRIVATE_KEY}" "${EMAIL_API}" \
+    --user "${API_PUBLIC_KEY}:${API_PRIVATE_KEY}" \
     --data "${REQUEST_DATA}" \
     --fail
 
