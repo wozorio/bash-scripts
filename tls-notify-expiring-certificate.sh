@@ -60,7 +60,7 @@ function fetch_certificate() {
     echo "${CERT_FILE}"
 }
 
-function send_mail() {
+function send_email() {
     local EMAIL_API="https://api.mailjet.com/v3/send"
 
     local SUBJECT="TLS certificate for ${URL} about to expire"
@@ -93,7 +93,7 @@ function send_mail() {
     fi
 }
 
-function notify_expiring_certificate() {
+function notify_engineers() {
     local CERT_FILE=$(fetch_certificate)
 
     # Delete temp file on exit
@@ -115,10 +115,10 @@ function notify_expiring_certificate() {
     # Check if certificate will expire before the threshold
     if [[ "${DATE_DIFF}" -le "${THRESHOLD}" ]]; then
         echo "WARNING: Oops! Certificate will expire in ${DATE_DIFF} days."
-        send_mail
+        send_email
     else
         echo "INFO: Nothing to worry about. TLS certificate will expire only in ${DATE_DIFF} days from now. To be more precise on ${CERT_EXPIRY_DATE_SHORT}"
     fi
 }
 
-notify_expiring_certificate
+notify_engineers
