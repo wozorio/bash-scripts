@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ######################################################################
-# Script Name    : enable-storage-account-firewall.sh
+# Script Name    : azure-storage-account-enable-firewall.sh
 # Description    : Used to enable Azure storage account firewall
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
 ######################################################################
