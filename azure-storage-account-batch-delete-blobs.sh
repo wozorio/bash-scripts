@@ -26,7 +26,7 @@ STORAGE_ACCOUNT=$1
 CONTAINER_NAME=$2
 
 STORAGE_ACCOUNT_KEY=$(az storage account keys list \
-    --account-name ${STORAGE_ACCOUNT} \
+    --account-name "${STORAGE_ACCOUNT}" \
     --query "[0].value" | tr -d '"')
 
-az storage blob delete-batch --account-key ${STORAGE_ACCOUNT_KEY} --account-name ${STORAGE_ACCOUNT} --source ${CONTAINER_NAME} --delete-snapshots include
+az storage blob delete-batch --account-key "${STORAGE_ACCOUNT_KEY}" --account-name "${STORAGE_ACCOUNT}" --source "${CONTAINER_NAME}" --delete-snapshots include
