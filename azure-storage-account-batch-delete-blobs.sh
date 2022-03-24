@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ######################################################################
-# Script Name    : azure-storage-batch-delete-blobs.sh
+# Script Name    : azure-storage-account-batch-delete-blobs.sh
 # Description    : Used to delete blobs from a storage account recursively
 # Args           : STORAGE_ACCOUNT CONTAINER_NAME
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
@@ -13,7 +13,7 @@ set -o nounset
 
 function usage() {
     echo "ERROR: Missing or invalid arguments!"
-    echo "Usage example: ./azure-storage-batch-delete-blobs.sh STORAGE_ACCOUNT CONTAINER_NAME"
+    echo "Usage example: ./azure-storage-account-batch-delete-blobs.sh STORAGE_ACCOUNT CONTAINER_NAME"
     exit 1
 }
 
