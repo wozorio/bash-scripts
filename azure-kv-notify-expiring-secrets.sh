@@ -54,7 +54,7 @@ function fetch_secrets() {
 }
 
 function send_notification() {
-    local MESSAGE="<strong><blockquote><h1>[SKID] - The secret ${SECRET_NAME} about to expire</h1></blockquote></strong> \n<br/>\n</p> 
+    local MESSAGE="<strong><blockquote><h1>Key Vault secret ${SECRET_NAME} about to expire</h1></blockquote></strong></p> 
     <p><strong>Secret Name:</strong> ${SECRET_NAME}</p> \
     <p><strong>Key Vault Name:</strong> ${KEYVAULT_NAME}</p> \
     <p><strong>Expiration date:</strong> ${SECRET_EXPIRY_DATE_SHORT}</p> \
