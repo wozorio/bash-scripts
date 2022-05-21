@@ -93,7 +93,7 @@ function send_email() {
     fi
 }
 
-function notify_engineers() {
+function main() {
     local CERT_FILE=$(fetch_certificate)
 
     # Delete temp file on exit
@@ -121,4 +121,4 @@ function notify_engineers() {
     fi
 }
 
-notify_engineers
+main
