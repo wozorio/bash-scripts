@@ -54,6 +54,9 @@ function fetch_secrets() {
 }
 
 function send_notification() {
+    echo "Oi ${SECRET_NAME}"
+    echo "ola ${SECRET_EXPIRY_DATE_SHORT}"
+    
     local MESSAGE="<strong><blockquote><h1>Key Vault secret ${SECRET_NAME} about to expire</h1></blockquote></strong></p> 
     <p><strong>Secret Name:</strong> ${SECRET_NAME}</p> \
     <p><strong>Key Vault Name:</strong> ${KEYVAULT_NAME}</p> \
