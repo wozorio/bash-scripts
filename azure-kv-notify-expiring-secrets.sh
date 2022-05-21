@@ -66,7 +66,7 @@ function send_notification() {
     fi
 }
 
-function notify_engineers() {
+function main() {
     KEYVAULT_SECRETS=$(fetch_secrets)
 
     echo "${KEYVAULT_SECRETS[@]}" | while read -r SECRET_NAME; do
@@ -94,4 +94,4 @@ function notify_engineers() {
     done
 }
 
-notify_engineers
+main
