@@ -43,7 +43,9 @@ while getopts "k:g:h:t:" OPTION; do
 done
 
 function fetch_secrets() {
-    local KEYVAULT_SECRETS=$(az keyvault secret list --vault-name "${KEYVAULT_NAME}" --query "[].name" --output tsv)
+    local KEYVAULT_SECRETS
+
+    KEYVAULT_SECRETS=$(az keyvault secret list --vault-name "${KEYVAULT_NAME}" --query "[].name" --output tsv)
 
     echo "${KEYVAULT_SECRETS}"
 }
@@ -56,11 +58,14 @@ function send_notification() {
     <p><strong>Remaining Days:</strong> ${DATE_DIFF}</p>"
 
     echo "Sending out notification via MS-Teams"
-    curl \
-        -H 'Content-Type: application/json' \
-        -d "{\"text\": \"${MESSAGE}\"}" "${HOOK}"
+    CURL_EXIT_CODE=$(
+        curl \
+            --header 'Content-Type: application/json' \
+            --data "{\"text\": \"${MESSAGE}\"}" "${HOOK}" \
+            --fail
+    )
 
-    if [[ "${?}" -ne 0 ]]; then
+    if [[ "${CURL_EXIT_CODE}" -eq 22 ]]; then
         echo "ERROR: Failed sending notification!"
         exit 1
     fi
