@@ -13,34 +13,23 @@ set -o pipefail
 set -o nounset
 
 function usage() {
-    echo "Usage: $0 [OPTIONS]"
-    echo -e "\t-k KeyVault name"
-    echo -e "\t-h Hook secret"
-    echo -e "\t-t Threshold"
+    echo "ERROR: Missing or invalid arguments!"
+    echo "Usage example: ${0} KEYVAULT_NAME SENDER RECIPIENT API_KEY THRESHOLD (OPTIONAL)"
     exit 1
 }
 
-THRESHOLD=60
+# Check if the right number of arguments were passed
+if [[ "${#}" -lt 4 ]]; then
+    usage
+fi
 
-while getopts "k:g:h:t:" OPTION; do
-    case "$OPTION" in
-    k)
-        KEYVAULT_NAME=$OPTARG
-        ;;
+KEYVAULT_NAME=$1
+SENDER=$2
+RECIPIENT=$3
+API_KEY=$4
 
-    h)
-        HOOK=$OPTARG
-        ;;
-
-    t)
-        THRESHOLD=$OPTARG
-        ;;
-
-    *)
-        usage
-        ;;
-    esac
-done
+# Define default value of 60 (days) for the THRESHOLD variable if an argument in the 5th position is not passed
+THRESHOLD=${5:-60}
 
 function fetch_secrets() {
     local KEYVAULT_SECRETS
@@ -50,23 +39,43 @@ function fetch_secrets() {
     echo "${KEYVAULT_SECRETS}"
 }
 
-function send_notification() {
-    local MESSAGE="<strong><blockquote><h1>Key Vault secret ${SECRET_NAME} about to expire</h1></blockquote></strong></p> 
-    <p><strong>Secret Name:</strong> ${SECRET_NAME}</p> \
-    <p><strong>Key Vault Name:</strong> ${KEYVAULT_NAME}</p> \
-    <p><strong>Expiration date:</strong> ${SECRET_EXPIRY_DATE_SHORT}</p> \
-    <p><strong>Remaining Days:</strong> ${DATE_DIFF}</p>"
+function send_email() {
+    local EMAIL_API="https://api.sendgrid.com/v3/mail/send"
 
-    echo "Sending out notification via MS-Teams"
-    CURL_EXIT_CODE=$(
+    local SUBJECT="KeyVault secret ${SECRET_NAME} about to expire"
+
+    local MESSAGE="<p> Dear Site Reliability Engineer, </p> \
+        <p> This is to notify you that the Key Vault secret <b>${SECRET_NAME}</b> will expire on <b>${SECRET_EXPIRY_DATE_SHORT}</b>. </p> \
+        <p> Please ensure the secret is rotated in a timely fashion. There are ${DATE_DIFF} days remaining. </p> \
+        <p> Sincerely yours, <br>DevOps Team </p>"
+
+    local REQUEST_DATA='{
+        "personalizations": [
+            {
+                "to": [{"email": "'${RECIPIENT}'"}],
+                "dynamic_template_data": { "first_name": "Operations" }
+            }
+        ],
+        "from": {"email": "'${SENDER}'"},
+        "subject":"'${SUBJECT}'",
+        "content": [{"type": "text/html", "value": "'${MESSAGE}'"}]
+    }'
+
+    echo "INFO: Sending out notification via e-mail"
+    CURL_HTTP_CODE=$(
         curl \
-            --header 'Content-Type: application/json' \
-            --data "{\"text\": \"${MESSAGE}\"}" "${HOOK}" \
-            --fail
+            --request POST \
+            --url "${EMAIL_API}" \
+            --header "Authorization: Bearer ${API_KEY}" \
+            --header "Content-Type: application/json" \
+            --data "${REQUEST_DATA}" \
+            --output /dev/null \
+            --write-out "%{http_code}" \
+            --silent
     )
 
-    if [[ "${CURL_EXIT_CODE}" -eq 22 ]]; then
-        echo "ERROR: Failed sending notification!"
+    if [[ "${CURL_HTTP_CODE}" -lt 200 || "${CURL_HTTP_CODE}" -gt 299 ]]; then
+        echo "ERROR: Failed sending notification with error code ${CURL_HTTP_CODE}!"
         exit 1
     fi
 }
@@ -91,7 +100,7 @@ function main() {
 
             if [[ "${DATE_DIFF}" -le "${THRESHOLD}" ]]; then
                 echo "WARNING: Key Vault secret ${SECRET_NAME} will expire on ${SECRET_EXPIRY_DATE_SHORT}"
-                send_notification
+                send_email
             else
                 echo "INFO: Nothing to worry about. Secret will expire only in ${DATE_DIFF} days from now. To be more precise on ${SECRET_EXPIRY_DATE_SHORT}"
             fi
