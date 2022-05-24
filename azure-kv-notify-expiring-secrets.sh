@@ -62,6 +62,7 @@ function send_email() {
     }'
 
     echo "INFO: Sending out notification via e-mail"
+    local CURL_HTTP_CODE
     CURL_HTTP_CODE=$(
         curl \
             --request POST \
@@ -86,17 +87,24 @@ function main() {
 
     for SECRET in ${KEYVAULT_SECRETS}; do
         echo "INFO: Checking expiration date for ${SECRET} secret."
+
+        local SECRET_EXPIRY_DATE
         SECRET_EXPIRY_DATE=$(az keyvault secret show --name "${SECRET}" --vault-name "${KEYVAULT_NAME}" --query attributes.expires -o tsv)
 
         if [[ -n "${SECRET_EXPIRY_DATE}" ]]; then
             # Convert the secret expiration date into seconds
+            local SECRET_EXPIRY_DATE_SHORT
             SECRET_EXPIRY_DATE_SHORT=$(date -d "${SECRET_EXPIRY_DATE}" +%d-%b-%Y)
+
+            local SECRET_EXPIRY_DATE_SECS
             SECRET_EXPIRY_DATE_SECS=$(date -d "${SECRET_EXPIRY_DATE}" +%s)
 
             # Convert the current date into seconds
+            local CURRENT_DATE_SECS
             CURRENT_DATE_SECS=$(date -d now +%s)
 
             # Calculate how many days are left for the secret to expire
+            local DATE_DIFF
             DATE_DIFF=$(((SECRET_EXPIRY_DATE_SECS - CURRENT_DATE_SECS) / 86400))
 
             if [[ "${DATE_DIFF}" -le "${THRESHOLD}" ]]; then
