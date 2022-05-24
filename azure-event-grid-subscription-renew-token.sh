@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ######################################################################
-# Script Name    : event-grid-subscription-renew-token.sh
+# Script Name    : azure-event-grid-subscription-renew-token.sh
 # Description    : Used to update the webhook Url of domain Event Grid
 #                  subscriptions with a new access token
 # Args           : SUBSCRIPTION_ID OAUTH2_TOKEN_ENDPOINT EVENT_GRID_DOMAIN CLIENT_ID CLIENT_SECRET RESOURCE_GROUP
@@ -33,10 +33,10 @@ RESOURCE_GROUP=$6
 # List Event Grid domain topics
 EVENT_GRID_TOPICS=$(
   az eventgrid domain topic list \
-  -g "${RESOURCE_GROUP}" \
-  --domain-name "${EVENT_GRID_DOMAIN}" \
-  --query [].name \
-  --output tsv
+    -g "${RESOURCE_GROUP}" \
+    --domain-name "${EVENT_GRID_DOMAIN}" \
+    --query [].name \
+    --output tsv
 )
 
 if [[ -n "${EVENT_GRID_TOPICS}" ]]; then
@@ -44,9 +44,9 @@ if [[ -n "${EVENT_GRID_TOPICS}" ]]; then
   echo "${EVENT_GRID_TOPICS[@]}" | while read -r topic; do
     EVENT_GRID_SUBSCRIPTIONS=$(
       az eventgrid event-subscription list \
-      --source-resource-id "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.EventGrid/domains/${EVENT_GRID_DOMAIN}/topics/${topic}" \
-      --query [].name \
-      --output tsv
+        --source-resource-id "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.EventGrid/domains/${EVENT_GRID_DOMAIN}/topics/${topic}" \
+        --query [].name \
+        --output tsv
     )
 
     if [[ -n "${EVENT_GRID_SUBSCRIPTIONS}" ]]; then
@@ -58,13 +58,13 @@ if [[ -n "${EVENT_GRID_TOPICS}" ]]; then
         echo "Getting an access token for the subscription ${subscription}"
         ACCESS_TOKEN=$(
           curl --request POST \
-          --url "${OAUTH2_TOKEN_ENDPOINT}" \
-          --header "Accept:application/json" \
-          --header "Authorization:Basic ${ENCODED_CLIENT_CREDENTIALS}" \
-          --data grant_type=client_credentials \
-          --data client_id="${CLIENT_ID}" \
-          --data client_secret="${CLIENT_SECRET}" \
-          --data scope="${subscription}" |
+            --url "${OAUTH2_TOKEN_ENDPOINT}" \
+            --header "Accept:application/json" \
+            --header "Authorization:Basic ${ENCODED_CLIENT_CREDENTIALS}" \
+            --data grant_type=client_credentials \
+            --data client_id="${CLIENT_ID}" \
+            --data client_secret="${CLIENT_SECRET}" \
+            --data scope="${subscription}" |
             jq '.access_token' |
             tr -d '"'
         )
@@ -72,9 +72,9 @@ if [[ -n "${EVENT_GRID_TOPICS}" ]]; then
         # Fetch the endpoint Url of the subscription
         SUBSCRIPTION_ENDPOINT_URL=$(
           az eventgrid event-subscription show --name "${subscription}" \
-          --source-resource-id "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.EventGrid/domains/${EVENT_GRID_DOMAIN}/topics/${topic}" \
-          --include-full-endpoint-url true \
-          --query "destination.endpointUrl" |
+            --source-resource-id "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.EventGrid/domains/${EVENT_GRID_DOMAIN}/topics/${topic}" \
+            --include-full-endpoint-url true \
+            --query "destination.endpointUrl" |
             tr -d '"'
         )
 
@@ -90,8 +90,8 @@ if [[ -n "${EVENT_GRID_TOPICS}" ]]; then
 
         # Update the endpoint of the subscription with the new access token
         az eventgrid event-subscription update --name "${subscription}" \
-        --source-resource-id "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.EventGrid/domains/${EVENT_GRID_DOMAIN}/topics/${topic}" \
-        --endpoint "${SUBSCRIPTION_ENDPOINT_URL}token=${ACCESS_TOKEN}"
+          --source-resource-id "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.EventGrid/domains/${EVENT_GRID_DOMAIN}/topics/${topic}" \
+          --endpoint "${SUBSCRIPTION_ENDPOINT_URL}token=${ACCESS_TOKEN}"
       done
     else
       echo "No Event Grid subscriptions found!"
