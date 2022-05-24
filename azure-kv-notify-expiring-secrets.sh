@@ -81,6 +81,7 @@ function send_email() {
 }
 
 function main() {
+    local KEYVAULT_SECRETS
     KEYVAULT_SECRETS=$(fetch_secrets)
 
     for SECRET in ${KEYVAULT_SECRETS}; do
