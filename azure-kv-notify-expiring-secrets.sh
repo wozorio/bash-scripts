@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ######################################################################
-# Script Name    : kv-notify-expiring-secrets.sh
+# Script Name    : azure-kv-notify-expiring-secrets.sh
 # Description    : Used to send notification via e-mail about Key Vault
 #                  secrets that will expire in XX days or less
 # Args           : KEYVAULT_NAME HOOK THRESHOLD
