@@ -32,7 +32,7 @@ fi
 
 SUPPORTED_VERSION_TYPES="break feat fix"
 
-if [[ ! "${SUPPORTED_VERSION_TYPES[*]}" =~ "${INCREMENT_VERSION_TYPE}" ]]; then
+if [[ ! "${SUPPORTED_VERSION_TYPES[*]}" =~ ${INCREMENT_VERSION_TYPE} ]]; then
     echo "ERROR: Invalid version type! Supported types are [ ${SUPPORTED_VERSION_TYPES} ]!"
     exit 1
 fi
