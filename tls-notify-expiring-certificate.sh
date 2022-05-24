@@ -104,9 +104,6 @@ function main() {
     local CERT_FILE
     CERT_FILE=$(fetch_certificate)
 
-    # Delete temp file on exit
-    trap 'unlink "${CERT_FILE}"' EXIT
-
     # Get certificate expiration date
     local CERT_EXPIRY_DATE
     CERT_EXPIRY_DATE=$(openssl x509 -in "${CERT_FILE}" -enddate -noout | sed "s/.*=\(.*\)/\1/")
@@ -133,6 +130,8 @@ function main() {
     else
         echo "INFO: Nothing to worry about. TLS certificate will expire only in ${DATE_DIFF} days from now. To be more precise on ${CERT_EXPIRY_DATE_SHORT}"
     fi
+
+    rm -f "${CERT_FILE}"
 }
 
 main

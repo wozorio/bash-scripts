@@ -84,7 +84,7 @@ function main() {
     KEYVAULT_SECRETS=$(fetch_secrets)
 
     for SECRET in ${KEYVAULT_SECRETS}; do
-        # Get the secret expiration date
+        echo "INFO: Checking expiration date for ${SECRET} secret."
         SECRET_EXPIRY_DATE=$(az keyvault secret show --name "${SECRET}" --vault-name "${KEYVAULT_NAME}" --query attributes.expires -o tsv)
 
         if [[ -n "${SECRET_EXPIRY_DATE}" ]]; then
