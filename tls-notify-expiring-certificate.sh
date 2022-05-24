@@ -135,4 +135,4 @@ function main() {
     fi
 }
 
-main
+main "$@"
