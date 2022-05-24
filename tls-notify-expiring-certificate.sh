@@ -101,10 +101,8 @@ function send_email() {
 }
 
 function main() {
-    fetch_certificate
-
     local CERT_FILE
-    CERT_FILE=$(fetch_certificate)
+    CERT_FILE=$(fetch_certificate) || exit $?
 
     # Delete temp file on exit
     trap "unlink ${CERT_FILE}" EXIT
