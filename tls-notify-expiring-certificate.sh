@@ -102,10 +102,10 @@ function send_email() {
 
 function main() {
     local CERT_FILE
-    CERT_FILE=$(fetch_certificate) || exit $?
+    CERT_FILE=$(fetch_certificate)
 
     # Delete temp file on exit
-    trap "unlink ${CERT_FILE}" EXIT
+    trap 'unlink "${CERT_FILE}"' EXIT
 
     # Get certificate expiration date
     local CERT_EXPIRY_DATE
@@ -135,4 +135,4 @@ function main() {
     fi
 }
 
-main "$@"
+main
