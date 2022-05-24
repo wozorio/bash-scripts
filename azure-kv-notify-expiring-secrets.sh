@@ -33,7 +33,6 @@ THRESHOLD=${5:-60}
 
 function fetch_secrets() {
     local KEYVAULT_SECRETS
-
     KEYVAULT_SECRETS=$(az keyvault secret list --vault-name "${KEYVAULT_NAME}" --query "[].name" --output tsv)
 
     echo "${KEYVAULT_SECRETS}"
