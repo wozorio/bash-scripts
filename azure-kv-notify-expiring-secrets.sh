@@ -4,7 +4,7 @@
 # Script Name    : azure-kv-notify-expiring-secrets.sh
 # Description    : Used to send notification via e-mail about Key Vault
 #                  secrets that will expire in XX days or less
-# Args           : KEYVAULT_NAME HOOK THRESHOLD
+# Args           : KEYVAULT_NAME SENDER RECIPIENT API_KEY THRESHOLD (OPTIONAL)
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
 ######################################################################
 
