@@ -82,6 +82,7 @@ function send_email() {
     }'
 
     echo "INFO: Sending out notification via e-mail"
+    local CURL_HTTP_CODE
     CURL_HTTP_CODE=$(
         curl \
             --request POST \
