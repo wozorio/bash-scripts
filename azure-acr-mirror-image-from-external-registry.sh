@@ -13,7 +13,7 @@ set -o nounset
 
 function usage() {
     echo "ERROR: Missing or invalid arguments!"
-    echo "Usage example: ./azure-acr-mirror-image-from-external-registry.sh EXTERNAL_CONTAINER_REGISTRY REPOSITORY IMAGE_TAG AZURE_CONTAINER_REGISTRY"
+    echo "Usage example: ${0} EXTERNAL_CONTAINER_REGISTRY REPOSITORY IMAGE_TAG AZURE_CONTAINER_REGISTRY"
     exit 1
 }
 
@@ -35,10 +35,10 @@ function logon_to_acr() {
 function check_image_exists() {
     local IMAGE_EXISTS=$(
         az acr repository show \
-        --name "${AZURE_CONTAINER_REGISTRY}" \
-        --image "${REPOSITORY}:${IMAGE_TAG}" \
-        --query name \
-        2>/dev/null || true
+            --name "${AZURE_CONTAINER_REGISTRY}" \
+            --image "${REPOSITORY}:${IMAGE_TAG}" \
+            --query name \
+            2>/dev/null || true
     )
     echo "${IMAGE_EXISTS}"
 }
@@ -54,9 +54,9 @@ function mirror_image_to_acr() {
     else
         echo "Mirroring image ${REPOSITORY}:${IMAGE_TAG} to ${AZURE_CONTAINER_REGISTRY}"
         az acr import \
-        --name "${AZURE_CONTAINER_REGISTRY}" \
-        --source "${EXTERNAL_CONTAINER_REGISTRY}/${REPOSITORY}:${IMAGE_TAG}" \
-        --image "${REPOSITORY}:${IMAGE_TAG}"
+            --name "${AZURE_CONTAINER_REGISTRY}" \
+            --source "${EXTERNAL_CONTAINER_REGISTRY}/${REPOSITORY}:${IMAGE_TAG}" \
+            --image "${REPOSITORY}:${IMAGE_TAG}"
 
         echo "Image successfully mirrored! It can be used with the following annotation:"
         echo "${AZURE_CONTAINER_REGISTRY}.azurecr.io/${REPOSITORY}:${IMAGE_TAG}"
