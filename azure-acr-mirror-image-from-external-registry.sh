@@ -33,7 +33,8 @@ function logon_to_acr() {
 }
 
 function check_image_exists() {
-    local IMAGE_EXISTS=$(
+    local IMAGE_EXISTS
+    IMAGE_EXISTS=$(
         az acr repository show \
             --name "${AZURE_CONTAINER_REGISTRY}" \
             --image "${REPOSITORY}:${IMAGE_TAG}" \
@@ -45,7 +46,9 @@ function check_image_exists() {
 
 function mirror_image_to_acr() {
     logon_to_acr
-    local IMAGE_EXISTS=$(check_image_exists)
+
+    local IMAGE_EXISTS
+    IMAGE_EXISTS=$(check_image_exists)
 
     if [[ -n "${IMAGE_EXISTS}" ]]; then
         echo "Image already exists in the ACR! It can be used with the following annotation:"
@@ -63,4 +66,8 @@ function mirror_image_to_acr() {
     fi
 }
 
-mirror_image_to_acr
+function main() {
+    mirror_image_to_acr
+}
+
+main
