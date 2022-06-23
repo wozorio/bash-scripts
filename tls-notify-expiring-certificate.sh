@@ -126,7 +126,7 @@ function main() {
 
     # Check if certificate will expire before the threshold
     if [[ "${DATE_DIFF}" -le "${THRESHOLD}" ]]; then
-        echo "WARNING: Oops! Certificate will expire in ${DATE_DIFF} days."
+        echo "WARN: Oops! Certificate will expire in ${DATE_DIFF} days."
         send_email
     else
         echo "INFO: Nothing to worry about. TLS certificate will expire only in ${DATE_DIFF} days from now. To be more precise on ${CERT_EXPIRY_DATE_SHORT}"
