@@ -107,7 +107,7 @@ function main() {
             DATE_DIFF=$(((SECRET_EXPIRY_DATE_SECS - CURRENT_DATE_SECS) / 86400))
 
             if [[ "${DATE_DIFF}" -le "${THRESHOLD}" ]]; then
-                echo "WARNING: Oops! Key Vault secret ${SECRET} will expire in ${DATE_DIFF} days."
+                echo "WARN: Oops! Key Vault secret ${SECRET} will expire in ${DATE_DIFF} days."
                 send_email
             else
                 echo "INFO: Nothing to worry about. Secret will expire only in ${DATE_DIFF} days from now. To be more precise on ${SECRET_EXPIRY_DATE_SHORT}"
