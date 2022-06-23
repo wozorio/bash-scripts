@@ -43,7 +43,7 @@ else
       # Delete untagged (dangling) images
       echo
       echo "${UNTAGGED_IMGS[@]}" | while read -r img; do
-        echo "WARNING: Deleting untagged (dangling) image: $rep@$img"
+        echo "WARN: Deleting untagged (dangling) image: $rep@$img"
         # az acr repository delete --name $CONTAINER_REGISTRY_NAME --image $rep@$img --yes
       done
     fi
@@ -111,7 +111,7 @@ else
             )
 
             # Delete images older than 30 days
-            echo "WARNING: Deleting image with tag: $IMG_TO_DELETE from repository: $rep"
+            echo "WARN: Deleting image with tag: $IMG_TO_DELETE from repository: $rep"
             # az acr repository delete --name $CONTAINER_REGISTRY_NAME --image $rep@$IMG_MANIFEST_ONLY --yes
           fi
         done
