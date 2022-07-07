@@ -36,7 +36,7 @@ PIPELINE_RUN=$(
         --verbose
 )
 
-BUILD_ID=$(echo $PIPELINE_RUN | jq .id)
+BUILD_ID=$(echo "${PIPELINE_RUN}" | jq .id)
 
 function check_if_pipeline_run_completed() {
     PIPELINE_RUN_STATUS=$(az pipelines runs show --id "${BUILD_ID}" | jq .status)
@@ -67,7 +67,7 @@ while [[ "${PIPELINE_RUN_STATUS}" -ne 1 ]]; do
     else
         echo "INFO: ${DEFINITION_NAME} pipeline is running..."
 
-        NUMBER_OF_RETRIES=$(($NUMBER_OF_RETRIES - 1))
+        NUMBER_OF_RETRIES=$((NUMBER_OF_RETRIES - 1))
 
         if [[ "${NUMBER_OF_RETRIES}" -eq 0 ]]; then
             echo "ERROR: Exceeded maximum number of retries! Please check the ${DEFINITION_NAME} pipeline!"
