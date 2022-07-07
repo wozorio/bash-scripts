@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ######################################################################
-# Script Name    : trigger-pipeline-run.sh
+# Script Name    : azuredevops-trigger-pipeline-run.sh
 # Description    : Used to trigger YAML pipeline runs in Azure DevOps with Azure CLI
 # Args           : BRANCH DEFINITION_NAME ORGANIZATION PROJECT
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
@@ -13,12 +13,12 @@ set -o nounset
 
 function usage() {
     echo "ERROR: Missing or invalid arguments!"
-    echo "Usage example: ./trigger-pipeline-run.sh BRANCH DEFINITION_NAME ORGANIZATION PROJECT"
+    echo "Usage example: ${0} BRANCH DEFINITION_NAME ORGANIZATION PROJECT"
     exit 1
 }
 
 # Check if the right number of arguments were passed
-if [[ "${#}" -lt 4 ]]; then
+if [[ "${#}" -ne 4 ]]; then
     usage
 fi
 
