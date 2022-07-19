@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ######################################################################
-# Script Name    : azure-terraform-bootstrap.sh
+# Script Name    : terraform-azure-bootstrap.sh
 # Description    : Used to create a blob storage account for Terraform state files
 # Args           : RESOURCE_GROUP_NAME LOCATION STORAGE_ACCOUNT_NAME
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
@@ -13,7 +13,7 @@ set -o nounset
 
 function usage() {
     echo "ERROR: Missing or invalid arguments!"
-    echo "Usage example: ./azure-terraform-bootstrap.sh RESOURCE_GROUP_NAME LOCATION STORAGE_ACCOUNT_NAME"
+    echo "Usage example: ${0} RESOURCE_GROUP_NAME LOCATION STORAGE_ACCOUNT_NAME"
     exit 1
 }
 
