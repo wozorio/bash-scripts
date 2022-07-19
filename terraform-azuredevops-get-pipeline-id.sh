@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ######################################################################
-# Script Name    : terraform-get-ado-pipeline-id.sh
+# Script Name    : terraform-azuredevops-get-pipeline-id.sh
 # Description    : Used by Terraform external data source resource to
 #                : fetch pipeline ID from the Azure DevOps Pipelines REST API
 # Args           : PIPELINE_NAME
