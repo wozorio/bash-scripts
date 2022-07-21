@@ -33,6 +33,6 @@ while getopts "r:s:" OPTION; do
 done
 
 az storage account update \
---default-action Allow \
---resource-group "${RESOURCE_GROUP}" \
---name "${STORAGE_ACCOUNT_NAME}"
+    --default-action Allow \
+    --resource-group "${RESOURCE_GROUP}" \
+    --name "${STORAGE_ACCOUNT_NAME}"

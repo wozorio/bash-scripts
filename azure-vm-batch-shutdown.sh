@@ -12,10 +12,10 @@ set -e
 
 # Stop all VMs
 az vm stop --ids $(
-  az vm list --query "[].id" --output tsv
+    az vm list --query "[].id" --output tsv
 )
 
 # Deallocate all VMs
 az vm deallocate --ids $(
-  az vm list --query "[].id" --output tsv
+    az vm list --query "[].id" --output tsv
 )

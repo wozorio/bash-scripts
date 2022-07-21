@@ -35,23 +35,23 @@ done
 # Remove allowed IP addresses (if any) from the exception list
 ALLOWED_IP_ADRESSES=$(
     az storage account network-rule list \
-    --resource-group "${RESOURCE_GROUP}" \
-    --account-name "${STORAGE_ACCOUNT_NAME}" \
-    --output tsv \
-    --query ipRules[].ipAddressOrRange
+        --resource-group "${RESOURCE_GROUP}" \
+        --account-name "${STORAGE_ACCOUNT_NAME}" \
+        --output tsv \
+        --query ipRules[].ipAddressOrRange
 )
 
 if [[ -n "${ALLOWED_IP_ADRESSES}" ]]; then
     for ALLOWED_IP_ADDRESS in ${ALLOWED_IP_ADRESSES}; do
         az storage account network-rule remove \
-        --resource-group "${RESOURCE_GROUP}" \
-        --account-name "${STORAGE_ACCOUNT_NAME}" \
-        --ip-address "${ALLOWED_IP_ADDRESS}"
+            --resource-group "${RESOURCE_GROUP}" \
+            --account-name "${STORAGE_ACCOUNT_NAME}" \
+            --ip-address "${ALLOWED_IP_ADDRESS}"
     done
 fi
 
 # Close the firewall
 az storage account update \
---default-action Deny \
---resource-group "${RESOURCE_GROUP}" \
---name "${STORAGE_ACCOUNT_NAME}"
+    --default-action Deny \
+    --resource-group "${RESOURCE_GROUP}" \
+    --name "${STORAGE_ACCOUNT_NAME}"

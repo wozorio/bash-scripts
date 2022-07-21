@@ -12,5 +12,5 @@ set -e
 
 # Start all VMs
 az vm start --ids $(
-  az vm list --query "[].id" --output tsv
+    az vm list --query "[].id" --output tsv
 )

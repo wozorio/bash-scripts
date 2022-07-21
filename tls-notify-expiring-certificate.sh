@@ -18,19 +18,6 @@ function usage() {
     exit 1
 }
 
-# Check if the right number of arguments were passed
-if [[ "${#}" -lt 4 ]]; then
-    usage
-fi
-
-URL=$1
-SENDER=$2
-RECIPIENT=$3
-API_KEY=$4
-
-# Define default value of 60 (days) for the THRESHOLD variable if an argument in the 5th position is not passed
-THRESHOLD=${5:-60}
-
 function check_url() {
     if ! host "${URL}" >/dev/null; then
         echo "ERROR: URL could not be resolved. Please ensure the correct address is passed."
@@ -102,6 +89,19 @@ function send_email() {
 }
 
 function main() {
+    # Check if the right number of arguments was passed
+    if [[ "${#}" -lt 4 ]]; then
+        usage
+    fi
+
+    URL=$1
+    SENDER=$2
+    RECIPIENT=$3
+    API_KEY=$4
+
+    # Define default value of 60 (days) for the THRESHOLD variable if an argument in the 5th position is not passed
+    THRESHOLD=${5:-60}
+
     local CERT_FILE
     CERT_FILE=$(fetch_certificate)
 
@@ -135,4 +135,4 @@ function main() {
     rm -f "${CERT_FILE}"
 }
 
-main
+main "$@"

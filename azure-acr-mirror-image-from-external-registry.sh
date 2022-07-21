@@ -12,20 +12,10 @@ set -o pipefail
 set -o nounset
 
 function usage() {
-    echo "ERROR: Missing or invalid arguments!"
+    echo "ERROR: Missing or invalid arguments"
     echo "Usage example: ${0} EXTERNAL_CONTAINER_REGISTRY REPOSITORY IMAGE_TAG AZURE_CONTAINER_REGISTRY"
     exit 1
 }
-
-# Check if the right number of arguments were passed
-if [[ "$#" -ne 4 ]]; then
-    usage
-fi
-
-EXTERNAL_CONTAINER_REGISTRY=$1
-REPOSITORY=$2
-IMAGE_TAG=$3
-AZURE_CONTAINER_REGISTRY=$4
 
 function logon_to_acr() {
     echo "Logging on to the ACR ${AZURE_CONTAINER_REGISTRY}"
@@ -51,23 +41,33 @@ function mirror_image_to_acr() {
     IMAGE_EXISTS=$(check_image_exists)
 
     if [[ -n "${IMAGE_EXISTS}" ]]; then
-        echo "Image already exists in the ACR! It can be used with the following annotation:"
+        echo "INFO: Image already exists in the ACR! It can be used with the following annotation:"
         echo "${AZURE_CONTAINER_REGISTRY}.azurecr.io/${REPOSITORY}:${IMAGE_TAG}"
         exit 0
     else
-        echo "Mirroring image ${REPOSITORY}:${IMAGE_TAG} to ${AZURE_CONTAINER_REGISTRY}"
+        echo "INFO: Mirroring image ${REPOSITORY}:${IMAGE_TAG} to ${AZURE_CONTAINER_REGISTRY}"
         az acr import \
             --name "${AZURE_CONTAINER_REGISTRY}" \
             --source "${EXTERNAL_CONTAINER_REGISTRY}/${REPOSITORY}:${IMAGE_TAG}" \
             --image "${REPOSITORY}:${IMAGE_TAG}"
 
-        echo "Image successfully mirrored! It can be used with the following annotation:"
+        echo "INFO: Image successfully mirrored! It can be used with the following annotation:"
         echo "${AZURE_CONTAINER_REGISTRY}.azurecr.io/${REPOSITORY}:${IMAGE_TAG}"
     fi
 }
 
 function main() {
+    # Check if the right number of arguments was passed
+    if [[ "$#" -ne 4 ]]; then
+        usage
+    fi
+
+    EXTERNAL_CONTAINER_REGISTRY=$1
+    REPOSITORY=$2
+    IMAGE_TAG=$3
+    AZURE_CONTAINER_REGISTRY=$4
+
     mirror_image_to_acr
 }
 
-main
+main "$@"

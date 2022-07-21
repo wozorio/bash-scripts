@@ -22,13 +22,13 @@ ADO_PIPELINES_API="https://dev.azure.com/bosch-ciam/skid/_apis/pipelines?api-ver
 
 PIPELINE_ID=$(
     curl \
-    --request GET "${ADO_PIPELINES_API}" \
-    --user "PAT:${AZDO_PERSONAL_ACCESS_TOKEN}" \
-    --header "Content-Type: application/json" \
-    --fail | \
-    jq \
-    --arg pipeline_name "$PIPELINE_NAME" \
-    '.value[] | select(.name==$pipeline_name) | .id'
+        --request GET "${ADO_PIPELINES_API}" \
+        --user "PAT:${AZDO_PERSONAL_ACCESS_TOKEN}" \
+        --header "Content-Type: application/json" \
+        --fail |
+        jq \
+            --arg pipeline_name "$PIPELINE_NAME" \
+            '.value[] | select(.name==$pipeline_name) | .id'
 )
 
 if [[ "${?}" -ne 0 || -z "${PIPELINE_ID}" ]]; then
@@ -37,6 +37,6 @@ if [[ "${?}" -ne 0 || -z "${PIPELINE_ID}" ]]; then
 fi
 
 jq \
---null-input \
---arg pipeline_id "$PIPELINE_ID" \
-'{"pipeline_id":$pipeline_id}'
+    --null-input \
+    --arg pipeline_id "$PIPELINE_ID" \
+    '{"pipeline_id":$pipeline_id}'
