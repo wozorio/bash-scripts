@@ -17,7 +17,7 @@ function usage() {
     exit 1
 }
 
-# Check if the right number of arguments were passed
+# Check if the right number of arguments was passed
 if [[ "${#}" -ne 4 ]]; then
     usage
 fi

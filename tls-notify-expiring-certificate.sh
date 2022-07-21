@@ -99,7 +99,7 @@ function main() {
     RECIPIENT=$3
     API_KEY=$4
 
-    # Define default value of 60 (days) for the THRESHOLD variable if an argument in the 5th position is not passed
+    # Assign a default value of 60 (days) to the THRESHOLD variable if an argument in the 5th position is not passed
     THRESHOLD=${5:-60}
 
     local CERT_FILE
