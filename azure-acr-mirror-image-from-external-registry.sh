@@ -26,10 +26,10 @@ function check_image_exists() {
     local IMAGE_EXISTS
     IMAGE_EXISTS=$(
         az acr repository show \
-            --name "${AZURE_CONTAINER_REGISTRY}" \
-            --image "${REPOSITORY}:${IMAGE_TAG}" \
-            --query name \
-            2>/dev/null || true
+        --name "${AZURE_CONTAINER_REGISTRY}" \
+        --image "${REPOSITORY}:${IMAGE_TAG}" \
+        --query name \
+        2>/dev/null || true
     )
     echo "${IMAGE_EXISTS}"
 }
@@ -45,11 +45,11 @@ function mirror_image_to_acr() {
         echo "${AZURE_CONTAINER_REGISTRY}.azurecr.io/${REPOSITORY}:${IMAGE_TAG}"
         exit 0
     else
-        echo "INFO: Mirroring image ${REPOSITORY}:${IMAGE_TAG} to ${AZURE_CONTAINER_REGISTRY}"
+        echo "DEBUG: Mirroring image ${REPOSITORY}:${IMAGE_TAG} to ${AZURE_CONTAINER_REGISTRY}"
         az acr import \
-            --name "${AZURE_CONTAINER_REGISTRY}" \
-            --source "${EXTERNAL_CONTAINER_REGISTRY}/${REPOSITORY}:${IMAGE_TAG}" \
-            --image "${REPOSITORY}:${IMAGE_TAG}"
+        --name "${AZURE_CONTAINER_REGISTRY}" \
+        --source "${EXTERNAL_CONTAINER_REGISTRY}/${REPOSITORY}:${IMAGE_TAG}" \
+        --image "${REPOSITORY}:${IMAGE_TAG}"
 
         echo "INFO: Image successfully mirrored! It can be used with the following annotation:"
         echo "${AZURE_CONTAINER_REGISTRY}.azurecr.io/${REPOSITORY}:${IMAGE_TAG}"
@@ -57,15 +57,15 @@ function mirror_image_to_acr() {
 }
 
 function main() {
-    # Check if the right number of arguments was passed
-    if [[ "$#" -ne 4 ]]; then
-        usage
-    fi
-
     EXTERNAL_CONTAINER_REGISTRY=$1
     REPOSITORY=$2
     IMAGE_TAG=$3
     AZURE_CONTAINER_REGISTRY=$4
+
+    # Check if the right number of arguments was passed
+    if [[ "$#" -ne 4 ]]; then
+        usage
+    fi
 
     mirror_image_to_acr
 }
