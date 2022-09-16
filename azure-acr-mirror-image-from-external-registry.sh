@@ -18,7 +18,7 @@ function usage() {
 }
 
 function logon_to_acr() {
-    echo "DEBUG: Logging on to the ACR ${AZURE_CONTAINER_REGISTRY}"
+    echo "DEBUG: Logging on to ACR ${AZURE_CONTAINER_REGISTRY}"
     az acr login --name "${AZURE_CONTAINER_REGISTRY}"
 }
 
