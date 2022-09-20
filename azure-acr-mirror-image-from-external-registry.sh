@@ -42,7 +42,7 @@ function mirror_image_to_acr() {
 
     if [[ -n "${IMAGE_EXISTS}" ]]; then
         echo "INFO: Image already exists in the ACR! It can be used with the following annotation:"
-        echo "${AZURE_CONTAINER_REGISTRY}.azurecr.io/${REPOSITORY}:${IMAGE_TAG}"
+        echo "${AZURE_CONTAINER_REGISTRY}/${REPOSITORY}:${IMAGE_TAG}"
         exit 0
     else
         echo "DEBUG: Mirroring image ${REPOSITORY}:${IMAGE_TAG} to ${AZURE_CONTAINER_REGISTRY}"
@@ -52,7 +52,7 @@ function mirror_image_to_acr() {
         --image "${REPOSITORY}:${IMAGE_TAG}"
 
         echo "INFO: Image successfully mirrored! It can be used with the following annotation:"
-        echo "${AZURE_CONTAINER_REGISTRY}.azurecr.io/${REPOSITORY}:${IMAGE_TAG}"
+        echo "${AZURE_CONTAINER_REGISTRY}/${REPOSITORY}:${IMAGE_TAG}"
     fi
 }
 
