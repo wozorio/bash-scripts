@@ -1,11 +1,18 @@
+################################################################################
+# DEPRECATION NOTICE
+#
+# This script has been replaced with a new Python-based solution.
+# Please refer to the new approach instead: https://github.com/wozorio/acr-cleaner
+################################################################################
+
 #!/bin/bash
 
-######################################################################
+################################################################################
 # Script Name    : azure-acr-cleanup.sh
 # Description    : Used to clean up container registries by deleting untagged (dangling) images and images older than 30 days
 # Args           : CONTAINER_REGISTRY_NAME
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
-######################################################################
+################################################################################
 
 # Stop execution on any error
 set -e
