@@ -12,7 +12,7 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-# Extract "pipeline_name" argument from the input into the PIPELINE_NAME shell variable
+# Extract the "pipeline_name" argument from the input into the PIPELINE_NAME shell variable
 # jq will ensure that the values are properly quoted and escaped for consumption by the shell
 eval "$(jq -r '@sh "PIPELINE_NAME=\(.pipeline_name)"')"
 
@@ -32,11 +32,12 @@ PIPELINE_ID=$(
 )
 
 if [[ "${?}" -ne 0 || -z "${PIPELINE_ID}" ]]; then
-    echo "ERROR: failed to fetch ID of ${PIPELINE_NAME} pipeline" 1>&2
+    echo "ERROR: Could not fetch ID of ${PIPELINE_NAME} pipeline" 1>&2
     exit 1
 fi
 
 jq \
     --null-input \
+    --exit-status \
     --arg pipeline_id "$PIPELINE_ID" \
     '{"pipeline_id":$pipeline_id}'
