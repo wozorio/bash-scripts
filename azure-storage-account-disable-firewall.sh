@@ -32,7 +32,25 @@ while getopts "r:s:" OPTION; do
     esac
 done
 
+# Remove allowed IP addresses (if any) from the exception list
+ALLOWED_IP_ADRESSES=$(
+    az storage account network-rule list \
+        --resource-group "${RESOURCE_GROUP}" \
+        --account-name "${STORAGE_ACCOUNT_NAME}" \
+        --output tsv \
+        --query ipRules[].ipAddressOrRange
+)
+
+if [[ -n "${ALLOWED_IP_ADRESSES}" ]]; then
+    for ALLOWED_IP_ADDRESS in ${ALLOWED_IP_ADRESSES}; do
+        az storage account network-rule remove \
+            --resource-group "${RESOURCE_GROUP}" \
+            --account-name "${STORAGE_ACCOUNT_NAME}" \
+            --ip-address "${ALLOWED_IP_ADDRESS}"
+    done
+fi
+
 az storage account update \
-    --default-action Allow \
+    --public-network-access "Disabled" \
     --resource-group "${RESOURCE_GROUP}" \
     --name "${STORAGE_ACCOUNT_NAME}"

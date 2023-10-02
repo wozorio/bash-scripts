@@ -5,7 +5,7 @@
 # Please refer to the new approach instead: https://github.com/wozorio/acr-cleaner
 ################################################################################
 
-#!/bin/bash
+#!/usr/bin/env bash
 
 ################################################################################
 # Script Name    : azure-acr-cleanup.sh

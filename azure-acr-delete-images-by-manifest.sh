@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ######################################################################
 # Script Name    : azure-acr-delete-images-by-manifest.sh

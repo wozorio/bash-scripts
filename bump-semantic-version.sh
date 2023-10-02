@@ -1,20 +1,25 @@
 #!/usr/bin/env bash
 
-######################################################################
+################################################################################
 # Script Name    : bump-semantic-version.sh
-# Description    : Used to bump semantic version based on PR titles following conventional commits specification (break, feat, fix)
-#                  Conventional Commits specification reference: https://www.conventionalcommits.org/en/v1.0.0/
+# Description    : Used to bump semantic version based on PR titles following
+#                  slightly adapted conventional commits specification (break, feat, fix)
+#                  Conventional Commits spec: https://www.conventionalcommits.org/
 # Args           : CURRENT_VERSION INCREMENT_VERSION_TYPE
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
-######################################################################
+################################################################################
 
-set -o errexit
 set -o pipefail
 set -o nounset
 
+function log() {
+    local MESSAGE="${1}"
+    echo "${MESSAGE}" 1>&2
+}
+
 function usage() {
-    echo "ERROR: Missing or invalid arguments!"
-    echo "Usage example: ${0} CURRENT_VERSION INCREMENT_VERSION_TYPE"
+    log "ERROR: Missing or invalid arguments"
+    log "Usage example: ${0} CURRENT_VERSION INCREMENT_VERSION_TYPE"
     exit 1
 }
 
@@ -26,14 +31,14 @@ CURRENT_VERSION="$1"
 INCREMENT_VERSION_TYPE="$2"
 
 if [[ -z "${CURRENT_VERSION}" ]]; then
-    echo "ERROR: Could not read previous version! Please ensure the version to be incremented is passed"
+    log "ERROR: Could not read previous version! Please ensure the version to be incremented is passed"
     exit 1
 fi
 
 SUPPORTED_VERSION_TYPES="break feat fix"
 
 if [[ ! "${SUPPORTED_VERSION_TYPES[*]}" =~ ${INCREMENT_VERSION_TYPE} ]]; then
-    echo "ERROR: Invalid version type! Supported types are [ ${SUPPORTED_VERSION_TYPES} ]"
+    log "ERROR: Invalid version type. Supported types are [ ${SUPPORTED_VERSION_TYPES} ]"
     exit 1
 fi
 
@@ -44,7 +49,7 @@ if [[ "${CURRENT_VERSION}" =~ ${SEMANTIC_VERSION_REGEX} ]]; then
     MINOR="${BASH_REMATCH[2]}"
     PATCH="${BASH_REMATCH[3]}"
 else
-    echo "ERROR: Current version ${CURRENT_VERSION} is not a semantic version"
+    log "ERROR: Current version ${CURRENT_VERSION} is not a semantic version!"
     exit 1
 fi
 
@@ -66,7 +71,5 @@ case "${INCREMENT_VERSION_TYPE}" in
 esac
 
 NEXT_VERSION="${MAJOR}.${MINOR}.${PATCH}"
-echo "INFO: Bump semantic version: ${CURRENT_VERSION} -> ${NEXT_VERSION}"
-
-# Define an output variable in Azure DevOps
-echo "##vso[task.setvariable variable=next_version;isOutput=true]${NEXT_VERSION}"
+log "INFO: Version will be bumped from ${CURRENT_VERSION} to ${NEXT_VERSION}"
+echo "##vso[task.setvariable variable=next_version]${NEXT_VERSION}"

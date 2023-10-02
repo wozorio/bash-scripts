@@ -32,26 +32,12 @@ while getopts "r:s:" OPTION; do
     esac
 done
 
-# Remove allowed IP addresses (if any) from the exception list
-ALLOWED_IP_ADRESSES=$(
-    az storage account network-rule list \
-        --resource-group "${RESOURCE_GROUP}" \
-        --account-name "${STORAGE_ACCOUNT_NAME}" \
-        --output tsv \
-        --query ipRules[].ipAddressOrRange
-)
-
-if [[ -n "${ALLOWED_IP_ADRESSES}" ]]; then
-    for ALLOWED_IP_ADDRESS in ${ALLOWED_IP_ADRESSES}; do
-        az storage account network-rule remove \
-            --resource-group "${RESOURCE_GROUP}" \
-            --account-name "${STORAGE_ACCOUNT_NAME}" \
-            --ip-address "${ALLOWED_IP_ADDRESS}"
-    done
-fi
-
-# Close the firewall
+## The initial idea was to only allow the public IP of the Azure DevOps agent as an exception in the firewall.
+## However, Microsoft's API is very unstable, so every now and then while running Terraform pipelines
+## the connection was dropped with 403 response codes, even having waited 60 seconds after the IP was added to the exception list
+## Due to such an instability, the firewall has to be temporarly open to ensure Terraform pipelines run smoothly
 az storage account update \
-    --default-action Deny \
+    --public-network-access "Enabled" \
+    --default-action "Allow" \
     --resource-group "${RESOURCE_GROUP}" \
     --name "${STORAGE_ACCOUNT_NAME}"

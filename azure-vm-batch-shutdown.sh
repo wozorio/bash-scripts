@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ######################################################################
 # Script Name    : azure-vm-batch-shutdown.sh

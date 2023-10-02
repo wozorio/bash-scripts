@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ######################################################################
 # Script Name    : terragrunt-import-resource-to-tfstate.sh
