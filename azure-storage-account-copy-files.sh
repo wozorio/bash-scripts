@@ -2,7 +2,7 @@
 
 ################################################################################
 # Script Name    : azure-storage-account-copy-files.sh
-# Description    : Used to copy files with proper MIME types to an Azure blob 
+# Description    : Used to copy files with proper MIME types to an Azure blob
 #                  storage using GNU parallel
 # Args           : N/A
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>

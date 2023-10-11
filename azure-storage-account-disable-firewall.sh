@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-######################################################################
+################################################################################
 # Script Name    : azure-storage-account-disable-firewall.sh
 # Description    : Used to disable Azure storage account firewall
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
-######################################################################
+################################################################################
 
 set -o errexit
 set -o pipefail

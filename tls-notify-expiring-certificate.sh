@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-######################################################################
+################################################################################
 # Script Name    : tls-notify-expiring-certificate.sh
 # Description    : Used to send notification via e-mail about TLS
 #                  certificates that will expire in XX days or less using Mailjet
 # Args           : URL SENDER RECIPIENT API_KEY THRESHOLD (OPTIONAL)
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
-######################################################################
+################################################################################
 
 set -o errexit
 set -o pipefail

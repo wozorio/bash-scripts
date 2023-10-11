@@ -42,6 +42,9 @@ function pull_image() {
 }
 
 function logon_to_acr() {
+    # The `addSpnToEnvironment` property must be set to `true` in the AzureCLI@2 pipeline task
+    # for the servicePrincipalId and servicePrincipalKey environment variables to be available
+    # shellcheck disable=SC2154
     buildah login \
         --username "${servicePrincipalId}" \
         --password "${servicePrincipalKey}" \

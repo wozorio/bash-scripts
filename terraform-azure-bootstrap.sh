@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-######################################################################
+################################################################################
 # Script Name    : terraform-azure-bootstrap.sh
 # Description    : Used to create a blob storage account for Terraform state files
 # Args           : RESOURCE_GROUP_NAME LOCATION STORAGE_ACCOUNT_NAME
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
-######################################################################
+################################################################################
 
 set -o errexit
 set -o pipefail
@@ -18,7 +18,8 @@ function usage() {
 }
 
 function create_resource_group() {
-    local RESOURCE_GROUP_EXISTS=$(az group exists --name "${RESOURCE_GROUP_NAME}")
+    local RESOURCE_GROUP_EXISTS
+    RESOURCE_GROUP_EXISTS=$(az group exists --name "${RESOURCE_GROUP_NAME}")
 
     if [[ "${RESOURCE_GROUP_EXISTS}" == "true" ]]; then
         echo "INFO: ${RESOURCE_GROUP_NAME} resource group already exists!"
@@ -29,7 +30,8 @@ function create_resource_group() {
 }
 
 function create_storage_account() {
-    local STORAGE_ACCOUNT_EXISTS=$(az storage account check-name --name "${STORAGE_ACCOUNT_NAME}" --query "nameAvailable")
+    local STORAGE_ACCOUNT_EXISTS
+    STORAGE_ACCOUNT_EXISTS=$(az storage account check-name --name "${STORAGE_ACCOUNT_NAME}" --query "nameAvailable")
 
     if [[ "${STORAGE_ACCOUNT_EXISTS}" == "false" ]]; then
         echo "INFO: ${STORAGE_ACCOUNT_NAME} storage account already exists!"
@@ -67,13 +69,15 @@ function create_storage_account() {
 }
 
 function create_storage_container() {
-    local STORAGE_ACCOUNT_KEY=$(
+    local STORAGE_ACCOUNT_KEY
+    STORAGE_ACCOUNT_KEY=$(
         az storage account keys list \
             --account-name "${STORAGE_ACCOUNT_NAME}" \
             --query "[0].value"
     )
 
-    local STORAGE_CONTAINER_EXISTS=$(
+    local STORAGE_CONTAINER_EXISTS
+    STORAGE_CONTAINER_EXISTS=$(
         az storage container exists \
             --name "${STORAGE_CONTAINER_NAME}" \
             --account-name "${STORAGE_ACCOUNT_NAME}" \

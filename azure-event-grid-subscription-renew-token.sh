@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-######################################################################
+################################################################################
 # Script Name    : azure-event-grid-subscription-renew-token.sh
 # Description    : Used to update the webhook Url of domain Event Grid
 #                  subscriptions with a new access token
 # Args           : SUBSCRIPTION_ID OAUTH2_TOKEN_ENDPOINT EVENT_GRID_DOMAIN CLIENT_ID CLIENT_SECRET RESOURCE_GROUP
 #                  FUNCTION_APP_NAME FUNCTION_APP_FUNCTION_NAME
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
-######################################################################
+################################################################################
 
 # Continue execution even if errors occur
 set +e
@@ -126,10 +126,13 @@ echo "${EVENT_GRID_TOPICS[@]}" | while read -r topic; do
             )
 
             # Remove the token from the endpoint Url
+            # shellcheck disable=SC2001
             SUBSCRIPTION_ENDPOINT_URL=$(echo "${SUBSCRIPTION_ENDPOINT_URL}" | sed 's/&token=.*//')
+            # shellcheck disable=SC2001
             SUBSCRIPTION_ENDPOINT_URL=$(echo "${SUBSCRIPTION_ENDPOINT_URL}" | sed 's/?token=.*//')
 
             if [[ "${SUBSCRIPTION_ENDPOINT_URL}" == *"code="* ]]; then
+                # shellcheck disable=SC2001
                 SUBSCRIPTION_ENDPOINT_URL_WITHOUT_FUNCTION_CODE=$(echo "${SUBSCRIPTION_ENDPOINT_URL}" | sed 's/?code=.*//')
 
                 FUNCTION_APP_FUNCTION_KEY=$(
