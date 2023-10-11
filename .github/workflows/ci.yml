@@ -10,7 +10,7 @@ defaults:
 
 jobs:
   lint:
-    name: Run Super-Linter
+    name: Run Run ShellCheck
     runs-on: ubuntu-latest
 
     permissions:
@@ -20,13 +20,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          # Full git history is needed to get a proper
-          # list of changed files within `super-linter`
-          fetch-depth: 0
 
       - name: Lint
-        uses: super-linter/super-linter@v5
-        env:
-          DEFAULT_BRANCH: master
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: azohra/shell-linter@latest

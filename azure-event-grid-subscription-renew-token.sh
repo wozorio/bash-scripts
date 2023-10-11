@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-######################################################################
+################################################################################
 # Script Name    : azure-event-grid-subscription-renew-token.sh
 # Description    : Used to update the webhook Url of domain Event Grid
 #                  subscriptions with a new access token
 # Args           : SUBSCRIPTION_ID OAUTH2_TOKEN_ENDPOINT EVENT_GRID_DOMAIN CLIENT_ID CLIENT_SECRET RESOURCE_GROUP
 #                  FUNCTION_APP_NAME FUNCTION_APP_FUNCTION_NAME
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
-######################################################################
+################################################################################
 
 # Continue execution even if errors occur
 set +e

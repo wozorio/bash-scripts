@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-######################################################################
+################################################################################
 # Script Name    : terragrunt-import-resource-to-tfstate.sh
 # Description    : Used to import existing resources into Terraform
 #                  state file and modify an attribute in its contents
 #                  before pushing it back to the remote storage in Azure
 # Args           : n/a
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
-######################################################################
+################################################################################
 
 # Declare variables
 ## Make sure you assign proper values to the variables below before executing the script!!!

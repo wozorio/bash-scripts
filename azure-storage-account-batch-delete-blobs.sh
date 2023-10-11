@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-######################################################################
+################################################################################
 # Script Name    : azure-storage-account-batch-delete-blobs.sh
 # Description    : Used to delete blobs recursively from a storage account container
 # Args           : STORAGE_ACCOUNT CONTAINER_NAME
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
-######################################################################
+################################################################################
 
 set -o errexit
 set -o pipefail
@@ -17,8 +17,8 @@ function usage() {
     exit 1
 }
 
-# Check if the right number of arguments were passed
-if [[ "{$#}" -ne 2 ]]; then
+# Check if the right number of arguments was passed
+if [[ "${#}" -ne 2 ]]; then
     usage
 fi
 

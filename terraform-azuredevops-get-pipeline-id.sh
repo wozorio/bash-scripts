@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-######################################################################
+################################################################################
 # Script Name    : terraform-azuredevops-get-pipeline-id.sh
 # Description    : Used by Terraform external data source resource to
 #                : fetch pipeline ID from the Azure DevOps Pipelines REST API
 # Args           : PIPELINE_NAME
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
-######################################################################
+################################################################################
 
 set -o errexit
 set -o pipefail
