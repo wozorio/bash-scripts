@@ -43,8 +43,8 @@ function pull_image() {
 
 function logon_to_acr() {
     buildah login \
-        --username "${servicePrincipalId}" \
-        --password "${servicePrincipalKey}" \
+        --username "${ACR_USERNAME}" \
+        --password "${ACR_PASSWORD}" \
         "${AZURE_CONTAINER_REGISTRY}"
 }
 
@@ -70,6 +70,11 @@ function main() {
     if [[ "${#}" -lt 4 || "${#}" -gt 5 ]]; then
         usage
     fi
+
+    # The `addSpnToEnvironment` property must be set to `true` in the AzureCLI@2 pipeline task
+    # for the servicePrincipalId and servicePrincipalKey environment variables to be available
+    ACR_USERNAME="${servicePrincipalId}"
+    ACR_PASSWORD="${servicePrincipalKey}"
 
     EXTERNAL_CONTAINER_REGISTRY="${1}"
     REPOSITORY="${2}"

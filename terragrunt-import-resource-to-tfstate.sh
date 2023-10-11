@@ -21,7 +21,8 @@ SQL_SERVER_NAME="${STAGE}-sys01-sqlsrv01"
 export STORAGE_NAME_TERRAFORM_STATE="${STAGE}stage01terraform"
 
 # Retrieve the access key from the Teraform backend storage account
-export ACCESS_KEY=$(
+export ACCESS_KEY
+ACCESS_KEY=$(
     az storage account keys list \
         --account-name ${STORAGE_NAME_TERRAFORM_STATE} \
         --query "[0].value" | tr -d '"'
@@ -29,11 +30,11 @@ export ACCESS_KEY=$(
 
 # Change to sys01 directory structure
 # Adjust the path according to your environment
-cd ~/terraform.deployment/environments/${SUBSCRIPTION_NAME}/${STAGE}-stage01/sys01
+cd ~/terraform.deployment/environments/${SUBSCRIPTION_NAME}/${STAGE}-stage01/sys01 || exit 1
 
 # Iterate over each instance in the directory structure
 for INSTANCE in inst*; do
-    cd "${INSTANCE}"/main
+    cd "${INSTANCE}"/main || exit 1
 
     # Terraform Init
     terragrunt init
