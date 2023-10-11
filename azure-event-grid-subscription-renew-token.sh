@@ -128,9 +128,11 @@ echo "${EVENT_GRID_TOPICS[@]}" | while read -r topic; do
             # Remove the token from the endpoint Url
             # shellcheck disable=SC2001
             SUBSCRIPTION_ENDPOINT_URL=$(echo "${SUBSCRIPTION_ENDPOINT_URL}" | sed 's/&token=.*//')
+            # shellcheck disable=SC2001
             SUBSCRIPTION_ENDPOINT_URL=$(echo "${SUBSCRIPTION_ENDPOINT_URL}" | sed 's/?token=.*//')
 
             if [[ "${SUBSCRIPTION_ENDPOINT_URL}" == *"code="* ]]; then
+                # shellcheck disable=SC2001
                 SUBSCRIPTION_ENDPOINT_URL_WITHOUT_FUNCTION_CODE=$(echo "${SUBSCRIPTION_ENDPOINT_URL}" | sed 's/?code=.*//')
 
                 FUNCTION_APP_FUNCTION_KEY=$(
