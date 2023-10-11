@@ -74,9 +74,6 @@ function main() {
         usage
     fi
 
-    ACR_USERNAME="${servicePrincipalId}"
-    ACR_PASSWORD="${servicePrincipalKey}"
-
     EXTERNAL_CONTAINER_REGISTRY="${1}"
     REPOSITORY="${2}"
     IMAGE_TAG="${3}"
