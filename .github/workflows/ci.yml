@@ -23,3 +23,5 @@ jobs:
 
       - name: Lint
         uses: azohra/shell-linter@latest
+        with:
+          exclude-paths: LICENSE
