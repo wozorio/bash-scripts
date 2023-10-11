@@ -31,6 +31,7 @@ PIPELINE_ID=$(
             '.value[] | select(.name==$pipeline_name) | .id'
 )
 
+# shellcheck disable=SC2181
 if [[ "${?}" -ne 0 || -z "${PIPELINE_ID}" ]]; then
     echo "ERROR: Could not fetch ID of ${PIPELINE_NAME} pipeline" 1>&2
     exit 1
