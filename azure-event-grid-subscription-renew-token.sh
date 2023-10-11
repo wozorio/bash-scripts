@@ -126,6 +126,7 @@ echo "${EVENT_GRID_TOPICS[@]}" | while read -r topic; do
             )
 
             # Remove the token from the endpoint Url
+            # shellcheck disable=SC2001
             SUBSCRIPTION_ENDPOINT_URL=$(echo "${SUBSCRIPTION_ENDPOINT_URL}" | sed 's/&token=.*//')
             SUBSCRIPTION_ENDPOINT_URL=$(echo "${SUBSCRIPTION_ENDPOINT_URL}" | sed 's/?token=.*//')
 
