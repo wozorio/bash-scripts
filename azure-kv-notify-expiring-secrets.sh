@@ -48,8 +48,8 @@ function send_email() {
     }'
 
     echo "INFO: Sending out notification via e-mail"
-    local CURL_HTTP_CODE
-    CURL_HTTP_CODE=$(
+    local RESPONSE_CODE
+    RESPONSE_CODE=$(
         curl \
             --request POST \
             --url "${EMAIL_API}" \
@@ -61,8 +61,8 @@ function send_email() {
             --silent
     )
 
-    if [[ "${CURL_HTTP_CODE}" -lt 200 || "${CURL_HTTP_CODE}" -gt 299 ]]; then
-        echo "ERROR: Failed sending notification with error code ${CURL_HTTP_CODE}!"
+    if [[ ${RESPONSE_CODE} -lt 200 || ${RESPONSE_CODE} -gt 299 ]]; then
+        echo "ERROR: Failed sending notification with error code ${RESPONSE_CODE}!"
         exit 1
     fi
 }
@@ -106,7 +106,7 @@ function main() {
             local DATE_DIFF
             DATE_DIFF=$(((SECRET_EXPIRY_DATE_SECS - CURRENT_DATE_SECS) / 86400))
 
-            if [[ "${DATE_DIFF}" -le "${THRESHOLD}" ]]; then
+            if [[ ${DATE_DIFF} -le ${THRESHOLD} ]]; then
                 echo "WARN: Oops! Key Vault secret ${SECRET} will expire in ${DATE_DIFF} days."
                 send_email
             else
