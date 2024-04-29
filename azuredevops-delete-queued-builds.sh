@@ -30,7 +30,7 @@ AZURE_DEVOPS_RESPONSE_CODE=$(
 )
 
 if [[ ${AZURE_DEVOPS_RESPONSE_CODE} -lt 200 || ${AZURE_DEVOPS_RESPONSE_CODE} -gt 299 ]]; then
-    log "ERROR: Failed accessing Azure DevOps API with error code ${AZURE_DEVOPS_RESPONSE_CODE}"
+    log "ERROR: Failed accessing Azure DevOps API with HTTP code ${AZURE_DEVOPS_RESPONSE_CODE}"
     exit 1
 fi
 
