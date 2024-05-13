@@ -7,15 +7,10 @@
 # Author         : Wellington Ozorio <well.ozorio@gmail.com>
 ################################################################################
 
-# Stop execution on any error
 set -e
 
-# Stop all VMs
-az vm stop --ids "$(
-    az vm list --query "[].id" --output tsv
-)"
-
-# Deallocate all VMs
-az vm deallocate --ids "$(
-    az vm list --query "[].id" --output tsv
-)"
+VIRTUAL_MACHINES=$(az vm list --query "[].id" --output tsv)
+for VIRTUAL_MACHINE in "${VIRTUAL_MACHINES}"; do
+    az vm stop --ids "${VIRTUAL_MACHINE}"
+    az vm deallocate --ids "${VIRTUAL_MACHINE}"
+done
