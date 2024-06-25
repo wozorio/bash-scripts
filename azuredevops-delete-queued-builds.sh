@@ -26,7 +26,7 @@ function log() {
 }
 
 AZURE_DEVOPS_RESPONSE_CODE=$(
-    curl -s -H "${HEADER}" "${NOT_STARTED_BUILDS_URI}" -o /dev/null --w "%{http_code}"
+    curl --silent --header "${HEADER}" "${NOT_STARTED_BUILDS_URI}" -o /dev/null --write-out "%{http_code}"
 )
 
 if [[ ${AZURE_DEVOPS_RESPONSE_CODE} -lt 200 || ${AZURE_DEVOPS_RESPONSE_CODE} -gt 299 ]]; then

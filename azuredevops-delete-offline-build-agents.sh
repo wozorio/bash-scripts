@@ -26,7 +26,7 @@ function log() {
 }
 
 AZURE_DEVOPS_RESPONSE_CODE=$(
-    curl -s -H "${HEADER}" "${AGENT_POOLS_URI}" -o /dev/null --w "%{http_code}"
+    curl --silent --header "${HEADER}" "${AGENT_POOLS_URI}" -o /dev/null --write-out "%{http_code}"
 )
 
 if [[ ${AZURE_DEVOPS_RESPONSE_CODE} -lt 200 || ${AZURE_DEVOPS_RESPONSE_CODE} -gt 299 ]]; then
@@ -50,14 +50,14 @@ if [[ -z "$OFFLINE_AGENTS" ]]; then
 fi
 
 jq -r '.id' <<<"${OFFLINE_AGENTS}" | while IFS= read -r AGENT; do
-    log "WARN: Deleting ${AGENT} offline agent from ${AGENT_POOL_NAME} agent pool in ${ORGANIZATION_NAME} organization"
+    log "WARN: Deleting offline agent ID ${AGENT} from ${AGENT_POOL_NAME} agent pool in ${ORGANIZATION_NAME} organization"
     curl \
         --request DELETE \
         --url "https://dev.azure.com/${ORGANIZATION_NAME}/_apis/distributedtask/pools/${AGENT_POOL_ID}/agents/${AGENT}?api-version=${API_VERSION}" \
         --header "${HEADER}" \
         --silent \
         --fail >/dev/null || {
-        log "ERROR: Failed deleting ${AGENT} offline agent from ${AGENT_POOL_NAME} agent pool in ${ORGANIZATION_NAME} organization"
+        log "ERROR: Failed deleting offline agent ID ${AGENT} from ${AGENT_POOL_NAME} agent pool in ${ORGANIZATION_NAME} organization"
         exit 1
     }
 done
