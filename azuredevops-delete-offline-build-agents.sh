@@ -34,7 +34,13 @@ if [[ ${AZURE_DEVOPS_RESPONSE_CODE} -lt 200 || ${AZURE_DEVOPS_RESPONSE_CODE} -gt
     exit 1
 fi
 
-AGENT_POOL=$(curl -s -H "${HEADER}" "${AGENT_POOLS_URI}" | jq --arg AGENT_POOL_NAME "$AGENT_POOL_NAME" '.value[] | select(.name == $AGENT_POOL_NAME)')
+AGENT_POOL=$(
+    curl \
+        --silent \
+        --header "${HEADER}" "${AGENT_POOLS_URI}" |
+        jq --arg AGENT_POOL_NAME "$AGENT_POOL_NAME" '.value[] | select(.name == $AGENT_POOL_NAME)'
+)
+
 if [[ -z "$AGENT_POOL" ]]; then
     log "ERROR: ${AGENT_POOL_NAME} agent pool not found in ${ORGANIZATION_NAME} organization"
     exit 1
