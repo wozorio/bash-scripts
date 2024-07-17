@@ -17,17 +17,17 @@ function log() {
 
 function usage() {
     log "Usage:"
-    log "-n Storage account name"
-    log "-r Storage account resource group"
-    log "-c The container name"
+    log "-s Storage account name"
+    log "-r Resource group"
+    log "-c Container name"
     exit 1
 }
 
 function get_args() {
     local OPTIND
-    while getopts "n:r:c:" OPTION; do
+    while getopts "s:r:c:" OPTION; do
         case "$OPTION" in
-        n)
+        s)
             export STORAGE_ACCOUNT_NAME=$OPTARG
             ;;
         r)
