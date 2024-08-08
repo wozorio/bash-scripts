@@ -239,6 +239,12 @@ function renew_eventgrid_subscription_access_token() {
 }
 
 function main() {
+    if [[ "${#}" -ne 8 ]]; then
+        log "Passed arguments are: ${*}"
+        log "Number of arguments: ${#}"
+        usage
+    fi
+
     export AZURE_SUBSCRIPTION_ID="${1}"
     export OAUTH2_TOKEN_ENDPOINT="${2}"
     export EVENTGRID_DOMAIN="${3}"
@@ -247,12 +253,6 @@ function main() {
     export RESOURCE_GROUP="${6}"
     export FUNCTION_APP_NAME="${7}"
     export FUNCTION_APP_FUNCTION_NAME="${8}"
-
-    if [[ "${#}" -ne 8 ]]; then
-        log "Passed arguments are: ${*}"
-        log "Number of arguments: ${#}"
-        usage
-    fi
 
     # Export functions to be used in parallel
     export -f log
