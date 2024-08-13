@@ -44,15 +44,15 @@ function delete_queued_build() {
     local BUILD="${1}"
 
     log "WARN: Deleting ${BUILD} queued build"
-    # curl \
-    #     --request DELETE \
-    #     --url "https://dev.azure.com/${ORGANIZATION_NAME}/${PROJECT_NAME}/_apis/build/builds/${BUILD}?api-version=${API_VERSION}" \
-    #     --header "${HEADER}" \
-    #     --silent \
-    #     --fail >/dev/null || {
-    #     log "ERROR: Failed deleting ${BUILD} queued build"
-    #     exit 1
-    # }
+    curl \
+        --request DELETE \
+        --url "https://dev.azure.com/${ORGANIZATION_NAME}/${PROJECT_NAME}/_apis/build/builds/${BUILD}?api-version=${API_VERSION}" \
+        --header "${HEADER}" \
+        --silent \
+        --fail >/dev/null || {
+        log "ERROR: Failed deleting ${BUILD} queued build"
+        exit 1
+    }
 }
 
 function main() {
