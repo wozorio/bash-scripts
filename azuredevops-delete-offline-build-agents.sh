@@ -61,7 +61,7 @@ function get_offline_agents() {
     local OFFLINE_AGENTS
     OFFLINE_AGENTS=$(curl --silent --header "${HEADER}" "${AGENTS_URI}" | jq '.value[] | select(.status == "offline")')
 
-    if [[ -z "$OFFLINE_AGENTS" ]]; then
+    if [[ -z "${OFFLINE_AGENTS}" ]]; then
         log "INFO: No offline agents found in ${AGENT_POOL_NAME} agent pool"
         exit 0
     fi

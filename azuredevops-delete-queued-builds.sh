@@ -34,6 +34,7 @@ function check_azure_devops_access() {
 function get_queued_builds() {
     local QUEUED_BUILDS
     QUEUED_BUILDS=$(curl --silent --header "${HEADER}" "${NOT_STARTED_BUILDS_URI}" | jq '.value[].id')
+
     if [[ -z "${QUEUED_BUILDS}" ]]; then
         log "INFO: No queued builds found to be deleted"
         exit 0
