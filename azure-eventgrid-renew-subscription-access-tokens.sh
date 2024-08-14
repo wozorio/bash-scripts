@@ -132,8 +132,8 @@ function get_access_token() {
             --request POST \
             --url "${OAUTH2_TOKEN_ENDPOINT}" \
             --silent \
-            --header "Accept:application/json" \
-            --header "Authorization:Basic ${BASE64_ENCODED_CLIENT_CREDENTIALS}" \
+            --header "Accept: application/json" \
+            --header "Authorization: Basic ${BASE64_ENCODED_CLIENT_CREDENTIALS}" \
             --data grant_type=client_credentials \
             --data client_id="${CLIENT_ID}" \
             --data client_secret="${CLIENT_SECRET}" \
