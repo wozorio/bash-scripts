@@ -61,6 +61,7 @@ remove_unsupported_tag_resources() {
     echo "${RESOURCES}"
 }
 
+# shellcheck disable=SC2016,SC2153
 function send_message_to_msteams() {
     local ENVIROMENT="${1}"
     local MSTEAMS_WEBHOOK_URL="${2}"
