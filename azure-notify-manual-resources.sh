@@ -32,18 +32,10 @@ get_filtered_untagged_resources() {
                 select(
                     .tags.managed_by != "terraform"
                     and (.name | contains("master") | not)
-                    and (.name | contains("stsharedtfwe") | not)
-                    and (.name | contains("stdevtfwe") | not)
-                    and (.name | contains("stqatfwe") | not)
-                    and (.name | contains("ststagetfwe") | not)
-                    and (.name | contains("stprodtfwe") | not)
+                    and (.name | contains("tf") | not)
                     and (.resourceGroup | startswith("DefaultResourceGroup-") | not)
                     and (.resourceGroup | ascii_downcase | startswith("mc_") | not)
-                    and (.resourceGroup | endswith("tf-we") | not)
                     and (.resourceGroup != "LogAnalyticsDefaultResources")
-                    and (.resourceGroup != "rg-shared-jumphost-we")
-                    and (.resourceGroup != "rg-shared-mgmt-environment-we")
-                    and (.resourceGroup != "rg-shared-jumphost-we")
                 )
             )
             | sort_by(.name)[]
