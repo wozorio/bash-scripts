@@ -4,7 +4,7 @@
 # Script Name    : az-cli-login.sh
 # Description    : Used to sign in to an Azure subscription with a service principal
 # Args           : SUBSCRIPTION_ID SERVICE_PRINCIPAL_ID SERVICE_PRINCIPAL_SECRET TENANT_ID
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 # Stop execution on any error

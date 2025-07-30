@@ -4,7 +4,7 @@
 # Script Name    : terraform-azure-bootstrap.sh
 # Description    : Used to create a blob storage account for Terraform state files
 # Args           : RESOURCE_GROUP_NAME LOCATION STORAGE_ACCOUNT_NAME
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 set -o errexit

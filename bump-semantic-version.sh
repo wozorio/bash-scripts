@@ -6,7 +6,7 @@
 #                  slightly adapted conventional commits specification (break, feat, fix)
 #                  Conventional Commits spec: https://www.conventionalcommits.org/
 # Args           : CURRENT_VERSION INCREMENT_VERSION_TYPE
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 set -o pipefail

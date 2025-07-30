@@ -4,7 +4,7 @@
 # Script Name    : azure-vm-batch-shutdown.sh
 # Description    : Used to shutdown and deallocate all VMs in a subscription
 # Args           : n/a
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 set -e

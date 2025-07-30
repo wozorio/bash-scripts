@@ -5,7 +5,7 @@
 # Description    : Used to copy files with proper MIME types to an Azure blob
 #                  storage using GNU parallel
 # Args           : N/A
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 set -e

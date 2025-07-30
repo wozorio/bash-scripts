@@ -4,7 +4,7 @@
 # Script Name    : git-commit-single-file.sh
 # Description    : Used to git commit changes to single files
 # Args           : FILE COMMIT_MESSAGE
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 set -o errexit

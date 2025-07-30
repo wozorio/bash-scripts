@@ -4,7 +4,7 @@
 # Script Name    : azuredevops-approve-renovate-prs.sh
 # Description    : Used to approve PRs created by Renovate bot
 # Args           : ORGANIZATION PROJECT REPOSITORY
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 set -o errexit

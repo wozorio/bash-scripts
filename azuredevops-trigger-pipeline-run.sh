@@ -4,7 +4,7 @@
 # Script Name    : azuredevops-trigger-pipeline-run.sh
 # Description    : Used to trigger YAML pipeline runs in Azure DevOps with Azure CLI
 # Args           : BRANCH DEFINITION_NAME ORGANIZATION PROJECT
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 set -o errexit

@@ -4,7 +4,7 @@
 # Script Name    : azuredevops-delete-offline-build-agents.sh
 # Description    : Used to batch delete offline build agents from a specified agent pool
 # Args           : PERSONAL_ACCESS_TOKEN ORGANIZATION_NAME AGENT_POOL_NAME [API_VERSION]
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 set -o errexit

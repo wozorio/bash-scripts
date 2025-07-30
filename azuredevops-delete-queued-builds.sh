@@ -4,7 +4,7 @@
 # Script Name    : azuredevops-delete-queued-builds.sh
 # Description    : Used to batch delete queued builds ("pipeline runs")
 # Args           : PERSONAL_ACCESS_TOKEN ORGANIZATION_NAME PROJECT_NAME [API_VERSION]
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 set -o errexit

@@ -4,7 +4,7 @@
 # Script Name    : azure-acr-mirror-image-from-external-registry.sh
 # Description    : Used to mirror images from external registries to an ACR (Azure Container Registry)
 # Args           : EXTERNAL_CONTAINER_REGISTRY REPOSITORY IMAGE_TAG AZURE_CONTAINER_REGISTRY [IMAGE_ARCHITECTURE]
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 set -e

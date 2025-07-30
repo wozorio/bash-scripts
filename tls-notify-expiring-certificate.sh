@@ -5,7 +5,7 @@
 # Description    : Used to send notification via e-mail about TLS
 #                  certificates that will expire in XX days or less using Mailjet
 # Args           : URL SENDER RECIPIENT API_KEY THRESHOLD (OPTIONAL)
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 set -o errexit

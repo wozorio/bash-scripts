@@ -3,7 +3,7 @@
 ################################################################################
 # Script Name    : azure-storage-account-enable-firewall.sh
 # Description    : Used to enable Azure storage account firewall
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 set -o errexit

@@ -6,7 +6,7 @@
 #                  state file and modify an attribute in its contents
 #                  before pushing it back to the remote storage in Azure
 # Args           : n/a
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 # Declare variables

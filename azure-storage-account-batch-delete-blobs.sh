@@ -4,7 +4,7 @@
 # Script Name    : azure-storage-account-batch-delete-blobs.sh
 # Description    : Used to delete blobs recursively from a storage account container
 # Args           : STORAGE_ACCOUNT CONTAINER_NAME
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 set -o errexit

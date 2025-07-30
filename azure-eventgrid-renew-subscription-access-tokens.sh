@@ -5,7 +5,7 @@
 # Description    : Used to renew access tokens for EventGrid subscriptions
 # Args           : AZURE_SUBSCRIPTION_ID OAUTH2_TOKEN_ENDPOINT EVENTGRID_DOMAIN CLIENT_ID CLIENT_SECRET RESOURCE_GROUP
 #                  FUNCTION_APP_NAME FUNCTION_APP_FUNCTION_NAME
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 # Continue execution even if errors occur

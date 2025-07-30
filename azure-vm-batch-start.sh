@@ -4,7 +4,7 @@
 # Script Name    : azure-vm-batch-start.sh
 # Description    : Used to start all VMs in a subscription
 # Args           : n/a
-# Author         : Wellington Ozorio <well.ozorio@gmail.com>
+# Author         : Wellington Ozorio <wozorio@duck.com>
 ################################################################################
 
 # Stop execution on any error
